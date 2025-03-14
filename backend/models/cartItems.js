@@ -1,8 +1,5 @@
 // models/cartItems.js
 import { DataTypes } from 'sequelize';
-// import { sequelize } from './index.js'; // Removed sequelize import
-// import Carts from './carts.js'; // Import Carts model - will be handled in index.js
-// import ProductVariants from './productVariants.js'; // Import ProductVariants model - will be handled in index.js
 
 const CartItemsModel = (sequelize) => {
   const CartItems = sequelize.define('CartItems', {
@@ -19,12 +16,12 @@ const CartItemsModel = (sequelize) => {
         key: 'cart_id',
       },
     },
-    variant_id: {
+    product_id: { // Changed from variant_id to product_id
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'ProductVariants', // Use the string name here
-        key: 'variant_id',
+        model: 'Products', // Use the string name here
+        key: 'product_id',
       },
     },
     quantity: {

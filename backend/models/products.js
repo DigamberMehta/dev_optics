@@ -1,52 +1,51 @@
-// models/products.js
+// models/product.js
 import { DataTypes } from 'sequelize';
-// import { sequelize } from './index.js'; // Removed sequelize import
-// import Categories from './categories.js'; // Import Categories model - will be handled in index.js
 
-const ProductsModel = (sequelize) => {
-  const Products = sequelize.define('Products', {
+const ProductModel = (sequelize) => {
+  const Product = sequelize.define('Product', {
     product_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    category_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Categories', // Use the string name here
-        key: 'category_id',
-      },
-    },
-    product_name: {
+    name: {
       type: DataTypes.STRING(255),
       allowNull: false,
     },
-    description: {
-      type: DataTypes.TEXT,
+    price: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
     },
-    brand: {
-      type: DataTypes.STRING(100),
+    product_type: {
+      type: DataTypes.ENUM('frame', 'lens', 'complete_glasses'),
+      allowNull: false,
+    },
+    frame_measurement_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'FrameMeasurements',
+        key: 'measurement_id',
+      },
+      allowNull: true,
+    },
+    lens_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Lenses',
+        key: 'lens_id',
+      },
+      allowNull: true,
     },
     images: {
-      type: DataTypes.JSON, // Store an array of image objects (url, alt_text, display_order)
+      type: DataTypes.JSON,
       defaultValue:[],
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
-    updated_at: {
-      type: DataTypes.DATE,
-      onUpdate: DataTypes.NOW,
     },
   }, {
     tableName: 'Products',
-    updatedAt: 'updated_at',
-    createdAt: 'created_at',
+    timestamps: true,
   });
 
-  return Products;
+  return Product;
 };
 
-export default ProductsModel;
+export default ProductModel;

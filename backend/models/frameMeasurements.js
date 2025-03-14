@@ -1,7 +1,5 @@
 // models/frameMeasurements.js
 import { DataTypes } from 'sequelize';
-// import { sequelize } from './index.js'; // Removed sequelize import
-// import Users from './users.js'; // Import Users model - will be handled in index.js
 
 const FrameMeasurementsModel = (sequelize) => {
   const FrameMeasurements = sequelize.define('FrameMeasurements', {
@@ -10,22 +8,23 @@ const FrameMeasurementsModel = (sequelize) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Users', // Use the string name here
-        key: 'user_id',
-      },
-    },
-    pupil_distance: {
+    temple_length: {
       type: DataTypes.DECIMAL(5, 2),
     },
-    frame_width: {
+    bridge_width: {
       type: DataTypes.DECIMAL(5, 2),
     },
-    lens_height: {
+    lens_width: {
       type: DataTypes.DECIMAL(5, 2),
+    },
+    material: {
+      type: DataTypes.STRING(50),
+    },
+    color: {
+      type: DataTypes.STRING(50),
+    },
+    style: {
+      type: DataTypes.STRING(50),
     },
   }, {
     tableName: 'FrameMeasurements',

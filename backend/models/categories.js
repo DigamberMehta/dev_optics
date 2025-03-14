@@ -1,32 +1,33 @@
-// models/categories.js
+// models/category.js
 import { DataTypes } from 'sequelize';
-// import { sequelize } from './index.js'; // Removed sequelize import
 
-const CategoriesModel = (sequelize) => {
-  const Categories = sequelize.define('Categories', {
+const CategoryModel = (sequelize) => {
+  const Category = sequelize.define('Category', {
     category_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    category_name: {
-      type: DataTypes.STRING(100),
+    name: {
+      type: DataTypes.STRING(255),
       allowNull: false,
       unique: true,
     },
+    // Optional: For category hierarchy
     parent_category_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Categories', // Use the string name here
+        model: 'Categories',
         key: 'category_id',
       },
+      allowNull: true,
     },
   }, {
     tableName: 'Categories',
-    timestamps: false,
+    timestamps: true,
   });
 
-  return Categories;
+  return Category;
 };
 
-export default CategoriesModel;
+export default CategoryModel;

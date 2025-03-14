@@ -21,8 +21,6 @@ import UsersModel from './users.js';
 import AddressesModel from './addresses.js';
 import CategoriesModel from './categories.js';
 import ProductsModel from './products.js';
-import ProductVariantsModel from './productVariants.js';
-// import ProductImagesModel from './productImages.js'; // Removed
 import OrdersModel from './orders.js';
 import OrderItemsModel from './orderItems.js';
 import PrescriptionsModel from './prescriptions.js';
@@ -33,17 +31,13 @@ import ReviewsModel from './reviews.js';
 import PromotionsModel from './promotions.js';
 import EyeTestsModel from './eyeTests.js';
 import FrameMeasurementsModel from './frameMeasurements.js';
-import StockMovementModel from './stockMovement.js';
-
+import LensModel from './lens.js'; // Import Lens model
 
 // Initialize Models by passing the sequelize instance
-// const Roles = RolesModel(sequelize); // Removed
 const Users = UsersModel(sequelize);
 const Addresses = AddressesModel(sequelize);
 const Categories = CategoriesModel(sequelize);
 const Products = ProductsModel(sequelize);
-const ProductVariants = ProductVariantsModel(sequelize);
-// const ProductImages = ProductImagesModel(sequelize); // If you had this
 const Orders = OrdersModel(sequelize);
 const OrderItems = OrderItemsModel(sequelize);
 const Prescriptions = PrescriptionsModel(sequelize);
@@ -54,71 +48,60 @@ const Reviews = ReviewsModel(sequelize);
 const Promotions = PromotionsModel(sequelize);
 const EyeTests = EyeTestsModel(sequelize);
 const FrameMeasurements = FrameMeasurementsModel(sequelize);
-const StockMovement = StockMovementModel(sequelize);
+const Lens = LensModel(sequelize); // Initialize Lens model
 
+Addresses.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+Users.hasMany(Addresses, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
-Addresses.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' }); // Addresses belongs to User, Cascade delete
-Users.hasMany(Addresses, { foreignKey: 'user_id', onDelete: 'CASCADE' }); // User has many Addresses
+// New Category Relations
+Categories.belongsTo(Categories, { foreignKey: 'parent_category_id', as: 'ParentCategory' });
+Categories.hasMany(Categories, { foreignKey: 'parent_category_id', as: 'SubCategories' });
 
-Categories.belongsTo(Categories, { foreignKey: 'parent_category_id', as: 'ParentCategory' }); // Category can have a parent Category
-Categories.hasMany(Categories, { foreignKey: 'parent_category_id', as: 'SubCategories' }); // Category can have many sub-categories
+// New Product Relations
+Products.belongsTo(Categories, { foreignKey: 'category_id' });
+Categories.hasMany(Products, { foreignKey: 'category_id', onDelete: 'CASCADE' });
 
-Products.belongsTo(Categories, { foreignKey: 'category_id' }); // Products belongs to Category
-Categories.hasMany(Products, { foreignKey: 'category_id', onDelete: 'CASCADE' }); // Category has many Products, Cascade delete
+Products.belongsTo(FrameMeasurements, { foreignKey: 'frame_measurement_id', as: 'frame' });
+FrameMeasurements.hasMany(Products, { foreignKey: 'frame_measurement_id', as: 'products' });
 
-ProductVariants.belongsTo(Products, { foreignKey: 'product_id', onDelete: 'CASCADE' }); // ProductVariants belongs to Product, Cascade delete
-Products.hasMany(ProductVariants, { foreignKey: 'product_id', onDelete: 'CASCADE' }); // Product has many ProductVariants
+Products.belongsTo(Lens, { foreignKey: 'lens_id', as: 'lens' });
+Lens.hasMany(Products, { foreignKey: 'lens_id', as: 'products' });
 
-// ProductImages.belongsTo(Products, { foreignKey: 'product_id', onDelete: 'CASCADE' }); // Removed
-// Products.hasMany(ProductImages, { foreignKey: 'product_id', onDelete: 'CASCADE' }); // Removed
+Orders.belongsTo(Users, { foreignKey: 'user_id' });
+Users.hasMany(Orders, { foreignKey: 'user_id' });
+Orders.belongsTo(Addresses, { foreignKey: 'address_id' });
+Addresses.hasMany(Orders, { foreignKey: 'address_id' });
 
-Orders.belongsTo(Users, { foreignKey: 'user_id' }); // Orders belongs to User
-Users.hasMany(Orders, { foreignKey: 'user_id' }); // User has many Orders
-Orders.belongsTo(Addresses, { foreignKey: 'address_id' }); // Orders belongs to Address
-Addresses.hasMany(Orders, { foreignKey: 'address_id' }); // Addresses has many Orders
+OrderItems.belongsTo(Orders, { foreignKey: 'order_id' });
+Orders.hasMany(OrderItems, { foreignKey: 'order_id' });
 
-OrderItems.belongsTo(Orders, { foreignKey: 'order_id' }); // OrderItems belongs to Order
-Orders.hasMany(OrderItems, { foreignKey: 'order_id' }); // Order has many OrderItems
-OrderItems.belongsTo(ProductVariants, { foreignKey: 'variant_id' }); // OrderItems belongs to ProductVariant
-ProductVariants.hasMany(OrderItems, { foreignKey: 'variant_id' }); // ProductVariant has many OrderItems
+Prescriptions.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+Users.hasMany(Prescriptions, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
-Prescriptions.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' }); // Prescriptions belongs to User, Cascade delete
-Users.hasMany(Prescriptions, { foreignKey: 'user_id', onDelete: 'CASCADE' }); // User has many Prescriptions
+Appointments.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+Users.hasMany(Appointments, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
-Appointments.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' }); // Appointments belongs to User, Cascade delete
-Users.hasMany(Appointments, { foreignKey: 'user_id', onDelete: 'CASCADE' }); // User has many Appointments
+Carts.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+Users.hasOne(Carts, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
-Carts.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' }); // Carts belongs to User, Cascade delete
-Users.hasOne(Carts, { foreignKey: 'user_id', onDelete: 'CASCADE' }); // User has one Cart (one-to-one relationship as per schema)
+CartItems.belongsTo(Carts, { foreignKey: 'cart_id' });
+Carts.hasMany(CartItems, { foreignKey: 'cart_id' });
 
-CartItems.belongsTo(Carts, { foreignKey: 'cart_id' }); // CartItems belongs to Cart
-Carts.hasMany(CartItems, { foreignKey: 'cart_id' }); // Cart has many CartItems
-CartItems.belongsTo(ProductVariants, { foreignKey: 'variant_id' }); // CartItems belongs to ProductVariant
-ProductVariants.hasMany(CartItems, { foreignKey: 'variant_id' }); // ProductVariant has many CartItems
+Reviews.belongsTo(Users, { foreignKey: 'user_id' });
+Users.hasMany(Reviews, { foreignKey: 'user_id' });
+Reviews.belongsTo(Products, { foreignKey: 'product_id' });
+Products.hasMany(Reviews, { foreignKey: 'product_id' });
 
-Reviews.belongsTo(Users, { foreignKey: 'user_id' }); // Reviews belongs to User
-Users.hasMany(Reviews, { foreignKey: 'user_id' }); // User has many Reviews
-Reviews.belongsTo(Products, { foreignKey: 'product_id' }); // Reviews belongs to Product
-Products.hasMany(Reviews, { foreignKey: 'product_id' }); // Product has many Reviews
-
-StockMovement.belongsTo(ProductVariants, { foreignKey: 'variant_id' }); // StockMovement belongs to ProductVariant
-ProductVariants.hasMany(StockMovement, { foreignKey: 'variant_id' }); // ProductVariant has many StockMovement
-
-EyeTests.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' }); // EyeTests belongs to User, Cascade delete
-Users.hasMany(EyeTests, { foreignKey: 'user_id', onDelete: 'CASCADE' }); // User has many EyeTests
-
-FrameMeasurements.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' }); // FrameMeasurements belongs to User, Cascade delete
-Users.hasMany(FrameMeasurements, { foreignKey: 'user_id', onDelete: 'CASCADE' }); // User has many FrameMeasurements
+EyeTests.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+Users.hasMany(EyeTests, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
 
 export {
     sequelize,
-    // Roles, // Removed
     Users,
     Addresses,
     Categories,
     Products,
-    ProductVariants,
     Orders,
     OrderItems,
     Prescriptions,
@@ -129,7 +112,7 @@ export {
     Promotions,
     EyeTests,
     FrameMeasurements,
-    StockMovement,
+    Lens,
 };
 
 // If table does not exist, create table
