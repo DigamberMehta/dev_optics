@@ -13,9 +13,9 @@ const ImageContainer = () => {
   const [selectedImage, setSelectedImage] = useState(images[0]);
 
   return (
-    <div className="flex flex-col p-6 items-center bg-white rounded-2xl shadow-md h-fit">
+    <div className="flex flex-col p-6 items-center bg-white rounded-2xl shadow-md h-fit relative">
       {/* Main Image */}
-      <div className="relative">
+      <div className="">
         <img src={selectedImage} alt="Product" className="w-96 h-64 object-contain" />
         <div className="absolute top-2 right-2 flex flex-col space-y-2">
           <button className="p-2 bg-white rounded-full shadow hover:bg-gray-100">

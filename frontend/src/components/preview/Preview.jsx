@@ -23,7 +23,7 @@ const Preview = () => {
 
   return (
     <div 
-      className='w-full h-screen overflow-hidden' 
+      className='w-full h-screen overflow-hidden pt-[80px]' 
       onWheel={handleGlobalScroll}
     >
       <div className="p-10 flex flex-col md:flex-row w-full h-full bg-slate-50">
@@ -32,7 +32,7 @@ const Preview = () => {
         </div>
         <div 
           ref={detailContainerRef}
-          className="w-full md:w-[60%] h-full overflow-y-auto"
+          className="w-full md:w-[60%] h-full overflow-y-auto hide-scrollbar"
         >
           <DetailContainer />
         </div>

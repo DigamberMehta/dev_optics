@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"; // Import useEffect
 import { Link } from "react-router-dom";
 import EyeAppointment from "../pages/EyeAppointment";
+import Login from "../pages/Login"; // Import the Login component
 
 const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(null);
@@ -8,20 +9,37 @@ const Navbar = () => {
   const [activeSubMenu, setActiveSubMenu] = useState(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // State for login modal
+  const [isLoginModalMounted, setIsLoginModalMounted] = useState(false); // To handle mounting and unmounting for transition
 
-  // Disable body scroll when modal is open
   useEffect(() => {
-    if (isAppointmentModalOpen) {
-      document.body.style.overflow = "hidden"; // Disable scrolling
-    } else {
-      document.body.style.overflow = "auto"; // Re-enable scrolling
+    const rootElement = document.getElementById("root");
+    
+    if (rootElement) {
+      if (isAppointmentModalOpen || isLoginModalOpen) {
+        rootElement.style.overflow = "hidden"; // Disable scrolling
+      } else {
+        rootElement.style.overflow = "auto"; // Re-enable scrolling
+      }
     }
-
+  
     // Cleanup function to re-enable scrolling when component unmounts
     return () => {
-      document.body.style.overflow = "auto";
+      if (rootElement) {
+        rootElement.style.overflow = "auto";
+      }
     };
-  }, [isAppointmentModalOpen]);
+  }, [isAppointmentModalOpen, isLoginModalOpen]);
+  
+
+  useEffect(() => {
+    if (isLoginModalOpen && !isLoginModalMounted) {
+      setIsLoginModalMounted(true);
+    } else if (!isLoginModalOpen && isLoginModalMounted) {
+      // Start fade-out animation
+      setTimeout(() => setIsLoginModalMounted(false), 300); // Adjust timeout to match transition duration
+    }
+  }, [isLoginModalOpen, isLoginModalMounted]);
 
   const menus = [
     { name: "EYEGLASSES", subMenu: ["Men", "Women", "Kids"] },
@@ -45,8 +63,17 @@ const Navbar = () => {
     setIsAppointmentModalOpen(false);
   };
 
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
+  };
+
+  const closeLoginModal = () => {
+    setIsLoginModalOpen(false);
+  };
+  console.log("hello from navbar");
+
   return (
-    <div className="w-full shadow-lg border-b sticky top-0 bg-white z-50">
+    <div className="w-full shadow-lg border-b bg-white z-50 fixed top-0">
       {/* Top Bar */}
       <div className="bg-blue-200 text-center py-2 text-sm">
         <span className="font-semibold">20% Off</span> with Code{" "}
@@ -113,9 +140,12 @@ const Navbar = () => {
         {/* Desktop Icons */}
         <div className="hidden lg:flex justify-between w-[200px] ml-5 text-gray-700 text-xl">
           <i className="fa-light fa-camera-viewfinder"></i>
-          <i className="fa fa-user"></i>
+
+            <i className="fa fa-user user-modal cursor-pointer" onClick={openLoginModal}></i> {/* Added onClick handler */}
+
           <i className="fa-regular fa-heart"></i>
-          <i className="fa-regular fa-cart-shopping"></i>
+
+      <Link to="/cartpage"><i className="fa-regular fa-cart-shopping"></i></Link>
         </div>
 
         {/* Mobile Controls */}
@@ -202,10 +232,18 @@ const Navbar = () => {
 
       {/* Appointment Modal */}
       {isAppointmentModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 py-4 px-4">    
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 py-4 px-4">
             <EyeAppointment closeModal={closeAppointmentModal} />
         </div>
       )}
+
+      {/* Login Modal */}
+      {isLoginModalMounted && (
+        <div className={`fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 py-4 px-4 ${isLoginModalOpen ? 'opacity-100' : 'opacity-0'}`}>
+          <Login closeModal={closeLoginModal} /> {/* Render the Login component as a modal */}
+        </div>
+      )}
+
     </div>
   );
 };

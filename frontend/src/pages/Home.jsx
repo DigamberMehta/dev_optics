@@ -19,7 +19,7 @@ const Home = () => {
     <>
    
       <Navbar />
-      <div className='mx-12 max-w[1800px]'>
+      <div className='mx-12 max-w[1800px] pt-[80px]'>
       <Carousel />
       <ShopByCategory />
       <PromotionCarousel />

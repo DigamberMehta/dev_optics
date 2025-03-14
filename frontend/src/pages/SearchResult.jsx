@@ -2,7 +2,7 @@ import Navbar from '@/components/Navbar'
 import Results from '@/components/result/Results'
 import React from 'react'
 
-const ResultsPage = () => {
+const SearchResult = () => {
   return (
     <>
     <Navbar />
@@ -11,4 +11,4 @@ const ResultsPage = () => {
   )
 }
 
-export default ResultsPage
+export default SearchResult;

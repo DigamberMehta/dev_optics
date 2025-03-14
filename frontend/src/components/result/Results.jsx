@@ -4,7 +4,7 @@ import FilterSidebar from "./FilterSidebar";
 
 const Results = () => {
   return (
-    <div  className="flex">
+    <div  className="flex pt-[100px]">
       <div className="hidden md:block w-1/4 ">
         <FilterSidebar />
       </div>

@@ -10,10 +10,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react"; // Import useEffect
 import authContext from "../context/authContext";
 
-const Login = () => {
+const Login = ({ closeModal }) => { // Receive the closeModal prop
   const [loginInput, setLoginInput] = useState({ email: "", password: "" });
   const [signupInput, setSignupInput] = useState({
     name: "",
@@ -22,6 +22,16 @@ const Login = () => {
   });
   const { user, isLoading, isError, registerUser, loginUser } =
     useContext(authContext);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true); // Trigger fade-in on mount
+  },);
+
+  const handleClose = () => {
+    setIsVisible(false);
+    setTimeout(closeModal, 300); // Delay closing to allow fade-out
+  };
 
     console.log(user, isLoading, isError);
 
@@ -48,8 +58,15 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <Tabs defaultValue="Signup" className="w-[400px]">
+    <div className={`relative bg-white rounded-2xl shadow-lg p-8 w-full max-w-md ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+ {/* Added transition to Login content */}
+      <button
+        onClick={handleClose}
+        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+      >
+        <i className="fa fa-times"></i>
+      </button>
+      <Tabs defaultValue="Signup" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="Signup">Signup</TabsTrigger>
           <TabsTrigger value="Login">Login</TabsTrigger>

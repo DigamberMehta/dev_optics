@@ -6,8 +6,9 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Login from './pages/Login'
 import Home from './pages/Home'
 import { AuthProvider } from './context/authContext'
-import Results from './components/result/Results'
+import SearchResult from './pages/SearchResult'
 import PreviewPage from './pages/PreviewPage'
+import CartPage from './pages/CartPage'
 
 const router = createBrowserRouter([
   {
@@ -19,8 +20,8 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: '/search',
-        element: <Results />,
+        path: '/searchResults',
+        element: <SearchResult />,
       },
       {
         path: '/auth',
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: '/preview',
         element: <PreviewPage />,
+      },
+      {
+        path: '/cartpage',
+        element: <CartPage />,
       },
     ],
   },
