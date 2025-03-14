@@ -70,7 +70,7 @@ const Navbar = () => {
   const closeLoginModal = () => {
     setIsLoginModalOpen(false);
   };
-  console.log("hello from navbar");
+  // console.log("hello from navbar");
 
   return (
     <div className="w-full shadow-lg border-b bg-white z-50 fixed top-0">

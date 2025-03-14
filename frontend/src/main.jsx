@@ -9,6 +9,7 @@ import { AuthProvider } from './context/authContext'
 import SearchResult from './pages/SearchResult'
 import PreviewPage from './pages/PreviewPage'
 import CartPage from './pages/CartPage'
+import { Toaster } from 'sonner';
 
 const router = createBrowserRouter([
   {
@@ -37,8 +38,13 @@ const router = createBrowserRouter([
       },
     ],
   },
-])
+]);
 
 createRoot(document.getElementById('root')).render(
-  <RouterProvider router={router} />
-)
+  
+    <>
+      <RouterProvider router={router} />
+      <Toaster />
+   
+      </>
+);

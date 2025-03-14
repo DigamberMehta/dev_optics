@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,8 @@ import { CalendarIcon, Clock, X } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import authContext from "../context/authContext";
+import { toast } from "sonner";
 
 export default function EyeAppointment({ closeModal }) {
   const [date, setDate] = useState(null);
@@ -14,18 +16,18 @@ export default function EyeAppointment({ closeModal }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [timeOpen, setTimeOpen] = useState(false);
+  const { user } = useContext(authContext);
 
-  // Generate time slots from 9:00 AM to 6:00 PM in 30-minute intervals
   const generateTimeSlots = () => {
     const slots = [];
     let hour = 9;
     let minute = 0;
     while (hour < 18 || (hour === 18 && minute === 0)) {
       const period = hour >= 12 ? "PM" : "AM";
-      const formattedHour = hour > 12 ? hour - 12 : hour; // Convert to 12-hour format
+      const formattedHour = hour > 12 ? hour - 12 : hour;
       const formattedMinute = minute === 0 ? "00" : minute;
       slots.push(`${formattedHour}:${formattedMinute} ${period}`);
-      minute += 60;
+      minute += 30;
       if (minute === 60) {
         minute = 0;
         hour++;
@@ -41,15 +43,49 @@ export default function EyeAppointment({ closeModal }) {
     setTimeOpen(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Appointment booked for ${name} on ${format(date, "PPP")} at ${time}`);
+
+    if (!date || !time) {
+      toast.error("Please select both date and time.");
+      return;
+    }
+
+    const appointmentData = {
+      date: format(date, "yyyy-MM-dd"),
+      time: time,
+    };
+
+    // const token = localStorage.getItem('token');
+    console.log(token);
+
+    try {
+      const response = await fetch('http://localhost/login/api/appointment.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(appointmentData),
+      });
+
+      const responseData = await response.json();
+
+      if (response.ok) {
+        toast.success(responseData.message || "Appointment booked successfully!");
+        closeModal();
+      } else {
+        toast.error(responseData.message || "Failed to book appointment.");
+      }
+    } catch (error) {
+      console.error("Error booking appointment:", error);
+      toast.error("Failed to connect to the server.");
+    }
   };
 
   return (
     <div className="w-[50%] h-[90vh] flex items-center justify-center">
       <Card className="w-full p-5 shadow-xl bg-white rounded-2xl relative">
-        {/* Close Button */}
         <Button
           onClick={closeModal}
           variant="ghost"
@@ -63,21 +99,17 @@ export default function EyeAppointment({ closeModal }) {
           <h2 className="text-xl font-semibold text-center mb-4">Book an Eye Appointment</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Name Field */}
             <div>
               <Label>Name</Label>
               <Input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
             </div>
 
-            {/* Email Field */}
             <div>
               <Label>Email</Label>
               <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
 
-            {/* Date and Time Selection - Flexbox Layout */}
             <div className="flex flex-col md:flex-row gap-4">
-              {/* Date Picker */}
               <div className="flex-1">
                 <Label>Select Date</Label>
                 <Popover>
@@ -88,12 +120,15 @@ export default function EyeAppointment({ closeModal }) {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-2">
-                    <Calendar selected={date} onSelect={setDate} />
+                    <Calendar 
+                      mode="single"
+                      selected={date} 
+                      onSelect={setDate}
+                    />
                   </PopoverContent>
                 </Popover>
               </div>
 
-              {/* Time Picker (Popover) */}
               <div className="flex-1">
                 <Label>Select Time</Label>
                 <Popover open={timeOpen} onOpenChange={setTimeOpen}>
@@ -116,8 +151,9 @@ export default function EyeAppointment({ closeModal }) {
               </div>
             </div>
 
-            {/* Submit Button */}
-            <Button type="submit" className="w-full bg-[#46BAC8] hover:bg-[#46BAC8]">Book Appointment</Button>
+            <Button type="submit" className="w-full bg-[#46BAC8] hover:bg-[#46BAC8]">
+              Book Appointment
+            </Button>
           </form>
         </CardContent>
       </Card>

@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState } from 'react'; // Removed useEffect import
 import axios from 'axios';
 
 const AuthContext = createContext();
@@ -8,13 +8,12 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(null);
 
-  const backendURL = 'http://localhost/login/api';  
+  const backendURL = 'http://localhost/login/api';
 
-   
   const fetchUser = async () => {
     setIsLoading(true);
     setIsError(null);
-    const token = localStorage.getItem('token');  
+    const token = localStorage.getItem('token');
 
     if (!token) {
       setUser(null);
@@ -44,9 +43,11 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.post(`${backendURL}/register.php`, userData);
       localStorage.setItem('token', response.data.token); // Store the token
       localStorage.setItem('user', JSON.stringify(response.data.user)); // Store user info
-      setUser(response.data.user); // Update user state
+      await fetchUser(); // Fetch user profile after successful registration
+      return response; // Return the response
     } catch (error) {
       setIsError(error.response?.data?.message || 'Registration failed');
+      return null; // Return null on error
     } finally {
       setIsLoading(false);
     }
@@ -60,9 +61,11 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.post(`${backendURL}/login.php`, credentials);
       localStorage.setItem('token', response.data.token); // Store the token
       localStorage.setItem('user', JSON.stringify(response.data.user)); // Store user info
-      setUser(response.data.user); // Update user state
+      await fetchUser(); // Fetch user profile after successful login
+      return response; // Return the response
     } catch (error) {
       setIsError(error.response?.data?.message || 'Login failed');
+      return null; // Return null on error
     } finally {
       setIsLoading(false);
     }
@@ -75,9 +78,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  useEffect(() => {
-    fetchUser();
-  }, []);  
+  // Removed the initial useEffect for fetchUser
   return (
     <AuthContext.Provider
       value={{

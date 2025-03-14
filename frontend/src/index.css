@@ -71,3 +71,21 @@
   display: none; /* Hide scrollbar in WebKit */
   
 }
+/* Calendar cursor fix */
+.rdp-day {
+  cursor: pointer !important;
+}
+
+/* Optional: Improve calendar styling */
+.rdp-cell {
+  padding: 0.25rem;
+}
+
+.rdp-day_selected {
+  background-color: #46BAC8;
+  color: white;
+}
+
+.rdp-day_selected:hover {
+  background-color: #3aa4b0;
+}
