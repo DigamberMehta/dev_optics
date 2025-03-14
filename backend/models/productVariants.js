@@ -1,49 +1,53 @@
 // models/productVariants.js
 import { DataTypes } from 'sequelize';
-import sequelize from '../index';
-import Products from './products'; // Import Products model
+// import { sequelize } from './index.js'; // Removed sequelize import
+// import Products from './products.js'; // Import Products model - will be handled in index.js
 
-const ProductVariants = sequelize.define('ProductVariants', {
-  variant_id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  product_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Products,
-      key: 'product_id',
+const ProductVariantsModel = (sequelize) => {
+  const ProductVariants = sequelize.define('ProductVariants', {
+    variant_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
-  },
-  sku: {
-    type: DataTypes.STRING(50),
-    unique: true,
-  },
-  color: {
-    type: DataTypes.STRING(50),
-  },
-  size: {
-    type: DataTypes.STRING(50),
-  },
-  lens_type: {
-    type: DataTypes.STRING(50),
-  },
-  frame_material: {
-    type: DataTypes.STRING(50),
-  },
-  stock_quantity: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-  },
-  price: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: false,
-  },
-}, {
-  tableName: 'ProductVariants',
-  timestamps: false, // Assuming no timestamps in the original schema for ProductVariants
-});
+    product_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Products', // Use the string name here
+        key: 'product_id',
+      },
+    },
+    sku: {
+      type: DataTypes.STRING(50),
+      unique: true,
+    },
+    color: {
+      type: DataTypes.STRING(50),
+    },
+    size: {
+      type: DataTypes.STRING(50),
+    },
+    lens_type: {
+      type: DataTypes.STRING(50),
+    },
+    frame_material: {
+      type: DataTypes.STRING(50),
+    },
+    stock_quantity: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    price: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+    },
+  }, {
+    tableName: 'ProductVariants',
+    timestamps: false,
+  });
 
-export default ProductVariants;
+  return ProductVariants;
+};
+
+export default ProductVariantsModel;

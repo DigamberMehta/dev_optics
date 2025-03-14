@@ -1,4 +1,3 @@
-// models/index.js
 import { Sequelize } from 'sequelize';
 
 const sequelize = new Sequelize('dev_optics', 'root', '', {
@@ -18,30 +17,45 @@ const sequelize = new Sequelize('dev_optics', 'root', '', {
   })();
 
 
-// Import all models
-import Roles from './roles';
-import Users from './users';
-import Addresses from './addresses';
-import Categories from './categories';
-import Products from './products';
-import ProductVariants from './productVariants';
-// import ProductImages from './productImages'; // Removed
-import Orders from './orders';
-import OrderItems from './orderItems';
-import Prescriptions from './prescriptions';
-import Appointments from './appointments';
-import Carts from './carts';
-import CartItems from './cartItems';
-import Reviews from './reviews';
-import Promotions from './promotions';
-import EyeTests from './eyeTests';
-import FrameMeasurements from './frameMeasurements';
-import StockMovement from './stockMovement';
+import UsersModel from './users.js';
+import AddressesModel from './addresses.js';
+import CategoriesModel from './categories.js';
+import ProductsModel from './products.js';
+import ProductVariantsModel from './productVariants.js';
+// import ProductImagesModel from './productImages.js'; // Removed
+import OrdersModel from './orders.js';
+import OrderItemsModel from './orderItems.js';
+import PrescriptionsModel from './prescriptions.js';
+import AppointmentsModel from './appointments.js';
+import CartsModel from './carts.js';
+import CartItemsModel from './cartItems.js';
+import ReviewsModel from './reviews.js';
+import PromotionsModel from './promotions.js';
+import EyeTestsModel from './eyeTests.js';
+import FrameMeasurementsModel from './frameMeasurements.js';
+import StockMovementModel from './stockMovement.js';
 
 
-// Define Associations (Relationships)
-Users.belongsTo(Roles, { foreignKey: 'role_id' }); // Users belongs to Role
-Roles.hasMany(Users, { foreignKey: 'role_id' }); // Role has many Users
+// Initialize Models by passing the sequelize instance
+// const Roles = RolesModel(sequelize); // Removed
+const Users = UsersModel(sequelize);
+const Addresses = AddressesModel(sequelize);
+const Categories = CategoriesModel(sequelize);
+const Products = ProductsModel(sequelize);
+const ProductVariants = ProductVariantsModel(sequelize);
+// const ProductImages = ProductImagesModel(sequelize); // If you had this
+const Orders = OrdersModel(sequelize);
+const OrderItems = OrderItemsModel(sequelize);
+const Prescriptions = PrescriptionsModel(sequelize);
+const Appointments = AppointmentsModel(sequelize);
+const Carts = CartsModel(sequelize);
+const CartItems = CartItemsModel(sequelize);
+const Reviews = ReviewsModel(sequelize);
+const Promotions = PromotionsModel(sequelize);
+const EyeTests = EyeTestsModel(sequelize);
+const FrameMeasurements = FrameMeasurementsModel(sequelize);
+const StockMovement = StockMovementModel(sequelize);
+
 
 Addresses.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' }); // Addresses belongs to User, Cascade delete
 Users.hasMany(Addresses, { foreignKey: 'user_id', onDelete: 'CASCADE' }); // User has many Addresses
@@ -99,13 +113,12 @@ Users.hasMany(FrameMeasurements, { foreignKey: 'user_id', onDelete: 'CASCADE' })
 
 export {
     sequelize,
-    Roles,
+    // Roles, // Removed
     Users,
     Addresses,
     Categories,
     Products,
     ProductVariants,
-    // ProductImages, // Removed from export
     Orders,
     OrderItems,
     Prescriptions,
@@ -118,3 +131,12 @@ export {
     FrameMeasurements,
     StockMovement,
 };
+
+// If table does not exist, create table
+sequelize.sync({ force: false })
+  .then(() => {
+    console.log('Database synchronized!');
+  })
+  .catch((error) => {
+    console.error('Error synchronizing database:', error);
+  });

@@ -1,38 +1,42 @@
 // models/cartItems.js
 import { DataTypes } from 'sequelize';
-import sequelize from '../index';
-import Carts from './carts'; // Import Carts model
-import ProductVariants from './productVariants'; // Import ProductVariants model
+// import { sequelize } from './index.js'; // Removed sequelize import
+// import Carts from './carts.js'; // Import Carts model - will be handled in index.js
+// import ProductVariants from './productVariants.js'; // Import ProductVariants model - will be handled in index.js
 
-const CartItems = sequelize.define('CartItems', {
-  cart_item_id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  cart_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Carts,
-      key: 'cart_id',
+const CartItemsModel = (sequelize) => {
+  const CartItems = sequelize.define('CartItems', {
+    cart_item_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
-  },
-  variant_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: ProductVariants,
-      key: 'variant_id',
+    cart_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Carts', // Use the string name here
+        key: 'cart_id',
+      },
     },
-  },
-  quantity: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-}, {
-  tableName: 'CartItems',
-  timestamps: false, // Assuming no timestamps in the original schema for CartItems
-});
+    variant_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'ProductVariants', // Use the string name here
+        key: 'variant_id',
+      },
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+  }, {
+    tableName: 'CartItems',
+    timestamps: false,
+  });
 
-export default CartItems;
+  return CartItems;
+};
+
+export default CartItemsModel;

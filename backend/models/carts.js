@@ -1,35 +1,39 @@
 // models/carts.js
 import { DataTypes } from 'sequelize';
-import sequelize from '../index';
-import Users from './users'; // Import Users model
+// import { sequelize } from './index.js'; // Removed sequelize import
+// import Users from './users.js'; // Import Users model - will be handled in index.js
 
-const Carts = sequelize.define('Carts', {
-  cart_id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  user_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    unique: true,
-    references: {
-      model: Users,
-      key: 'user_id',
+const CartsModel = (sequelize) => {
+  const Carts = sequelize.define('Carts', {
+    cart_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
-  },
-  created_at: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
-  },
-  updated_at: {
-    type: DataTypes.DATE,
-    onUpdate: DataTypes.NOW,
-  },
-}, {
-  tableName: 'Carts',
-  updatedAt: 'updated_at', // To match the schema's column name
-  createdAt: 'created_at', // To match the schema's column name
-});
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: true,
+      references: {
+        model: 'Users', // Use the string name here
+        key: 'user_id',
+      },
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      onUpdate: DataTypes.NOW,
+    },
+  }, {
+    tableName: 'Carts',
+    updatedAt: 'updated_at',
+    createdAt: 'created_at',
+  });
 
-export default Carts;
+  return Carts;
+};
+
+export default CartsModel;

@@ -1,34 +1,38 @@
 // models/frameMeasurements.js
 import { DataTypes } from 'sequelize';
-import sequelize from '../index';
-import Users from './users'; // Import Users model
+// import { sequelize } from './index.js'; // Removed sequelize import
+// import Users from './users.js'; // Import Users model - will be handled in index.js
 
-const FrameMeasurements = sequelize.define('FrameMeasurements', {
-  measurement_id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  user_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Users,
-      key: 'user_id',
+const FrameMeasurementsModel = (sequelize) => {
+  const FrameMeasurements = sequelize.define('FrameMeasurements', {
+    measurement_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
-  },
-  pupil_distance: {
-    type: DataTypes.DECIMAL(5, 2),
-  },
-  frame_width: {
-    type: DataTypes.DECIMAL(5, 2),
-  },
-  lens_height: {
-    type: DataTypes.DECIMAL(5, 2),
-  },
-}, {
-  tableName: 'FrameMeasurements',
-  timestamps: false, // Assuming no timestamps in the original schema for FrameMeasurements
-});
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Users', // Use the string name here
+        key: 'user_id',
+      },
+    },
+    pupil_distance: {
+      type: DataTypes.DECIMAL(5, 2),
+    },
+    frame_width: {
+      type: DataTypes.DECIMAL(5, 2),
+    },
+    lens_height: {
+      type: DataTypes.DECIMAL(5, 2),
+    },
+  }, {
+    tableName: 'FrameMeasurements',
+    timestamps: false,
+  });
 
-export default FrameMeasurements;
+  return FrameMeasurements;
+};
+
+export default FrameMeasurementsModel;

@@ -1,42 +1,46 @@
 // models/orderItems.js
 import { DataTypes } from 'sequelize';
-import sequelize from '../index';
-import Orders from './orders'; // Import Orders model
-import ProductVariants from './productVariants'; // Import ProductVariants model
+// import { sequelize } from './index.js'; // Removed sequelize import
+// import Orders from './orders.js'; // Import Orders model - will be handled in index.js
+// import ProductVariants from './productVariants.js'; // Import ProductVariants model - will be handled in index.js
 
-const OrderItems = sequelize.define('OrderItems', {
-  order_item_id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  order_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Orders,
-      key: 'order_id',
+const OrderItemsModel = (sequelize) => {
+  const OrderItems = sequelize.define('OrderItems', {
+    order_item_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
-  },
-  variant_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: ProductVariants,
-      key: 'variant_id',
+    order_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Orders', // Use the string name here
+        key: 'order_id',
+      },
     },
-  },
-  quantity: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  unit_price_at_purchase: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: false,
-  },
-}, {
-  tableName: 'OrderItems',
-  timestamps: false, // Assuming no timestamps in the original schema for OrderItems
-});
+    variant_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'ProductVariants', // Use the string name here
+        key: 'variant_id',
+      },
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    unit_price_at_purchase: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+    },
+  }, {
+    tableName: 'OrderItems',
+    timestamps: false,
+  });
 
-export default OrderItems;
+  return OrderItems;
+};
+
+export default OrderItemsModel;
