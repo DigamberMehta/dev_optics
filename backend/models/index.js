@@ -19,7 +19,6 @@ const sequelize = new Sequelize('dev_optics', 'root', '', {
 
 import UsersModel from './users.js';
 import AddressesModel from './addresses.js';
-import CategoriesModel from './categories.js';
 import ProductsModel from './products.js';
 import OrdersModel from './orders.js';
 import OrderItemsModel from './orderItems.js';
@@ -36,7 +35,6 @@ import LensModel from './lens.js'; // Import Lens model
 // Initialize Models by passing the sequelize instance
 const Users = UsersModel(sequelize);
 const Addresses = AddressesModel(sequelize);
-const Categories = CategoriesModel(sequelize);
 const Products = ProductsModel(sequelize);
 const Orders = OrdersModel(sequelize);
 const OrderItems = OrderItemsModel(sequelize);
@@ -53,14 +51,9 @@ const Lens = LensModel(sequelize); // Initialize Lens model
 Addresses.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 Users.hasMany(Addresses, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
-// New Category Relations
-Categories.belongsTo(Categories, { foreignKey: 'parent_category_id', as: 'ParentCategory' });
-Categories.hasMany(Categories, { foreignKey: 'parent_category_id', as: 'SubCategories' });
+// Removed Category Relations
 
 // New Product Relations
-Products.belongsTo(Categories, { foreignKey: 'category_id' });
-Categories.hasMany(Products, { foreignKey: 'category_id', onDelete: 'CASCADE' });
-
 Products.belongsTo(FrameMeasurements, { foreignKey: 'frame_measurement_id', as: 'frame' });
 FrameMeasurements.hasMany(Products, { foreignKey: 'frame_measurement_id', as: 'products' });
 
@@ -100,7 +93,6 @@ export {
     sequelize,
     Users,
     Addresses,
-    Categories,
     Products,
     Orders,
     OrderItems,
@@ -116,7 +108,7 @@ export {
 };
 
 // If table does not exist, create table
-sequelize.sync({ force: false })
+sequelize.sync({ force: true })
   .then(() => {
     console.log('Database synchronized!');
   })

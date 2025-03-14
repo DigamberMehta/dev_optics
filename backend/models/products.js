@@ -17,7 +17,7 @@ const ProductModel = (sequelize) => {
       allowNull: false,
     },
     product_type: {
-      type: DataTypes.ENUM('frame', 'lens', 'complete_glasses'),
+      type: DataTypes.ENUM('frame', 'lens', 'complete_glasses', 'sunglasses', 'blue_light_glasses'),
       allowNull: false,
     },
     frame_measurement_id: {
