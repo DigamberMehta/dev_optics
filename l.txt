@@ -1,0 +1,204 @@
+-- Optics Website Schema
+-- Includes all tables and relationships for the project
+
+-- Roles Table
+CREATE TABLE Roles (
+    role_id INT PRIMARY KEY AUTO_INCREMENT,
+    role_name VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- Users Table
+CREATE TABLE Users (
+    user_id INT PRIMARY KEY AUTO_INCREMENT,
+    role_id INT NOT NULL,
+    username VARCHAR(50) UNIQUE,
+    email VARCHAR(100) UNIQUE,
+    password_hash VARCHAR(255),
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    phone VARCHAR(20),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    last_login DATETIME,
+    FOREIGN KEY (role_id) REFERENCES Roles(role_id)
+);
+
+-- Addresses Table
+CREATE TABLE Addresses (
+    address_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    street_address VARCHAR(255),
+    city VARCHAR(100),
+    state VARCHAR(100),
+    postal_code VARCHAR(20),
+    country VARCHAR(100),
+    is_primary BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- Categories Table
+CREATE TABLE Categories (
+    category_id INT PRIMARY KEY AUTO_INCREMENT,
+    category_name VARCHAR(100) NOT NULL UNIQUE,
+    parent_category_id INT,
+    FOREIGN KEY (parent_category_id) REFERENCES Categories(category_id)
+);
+
+-- Products Table
+CREATE TABLE Products (
+    product_id INT PRIMARY KEY AUTO_INCREMENT,
+    category_id INT NOT NULL,
+    product_name VARCHAR(255) NOT NULL,
+    description TEXT,
+    brand VARCHAR(100),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES Categories(category_id)
+);
+
+-- Product Variants Table
+CREATE TABLE ProductVariants (
+    variant_id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    sku VARCHAR(50) UNIQUE,
+    color VARCHAR(50),
+    size VARCHAR(50),
+    lens_type VARCHAR(50),
+    frame_material VARCHAR(50),
+    stock_quantity INT DEFAULT 0,
+    price DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES Products(product_id)
+);
+
+-- Product Images Table
+CREATE TABLE ProductImages (
+    image_id INT PRIMARY KEY AUTO_INCREMENT,
+    product_id INT NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    alt_text VARCHAR(255),
+    display_order INT DEFAULT 0,
+    FOREIGN KEY (product_id) REFERENCES Products(product_id)
+);
+
+-- Orders Table
+CREATE TABLE Orders (
+    order_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    address_id INT NOT NULL,
+    order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    total_amount DECIMAL(10,2) NOT NULL,
+    status ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled'),
+    payment_status ENUM('paid', 'unpaid', 'refunded'),
+    payment_method VARCHAR(50),
+    transaction_id VARCHAR(255),
+    promotion_id INT,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (address_id) REFERENCES Addresses(address_id)
+);
+
+-- Order Items Table
+CREATE TABLE OrderItems (
+    order_item_id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT NOT NULL,
+    variant_id INT NOT NULL,
+    quantity INT NOT NULL,
+    unit_price_at_purchase DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id),
+    FOREIGN KEY (variant_id) REFERENCES ProductVariants(variant_id)
+);
+
+-- Prescriptions Table
+CREATE TABLE Prescriptions (
+    prescription_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    file_url VARCHAR(255) NOT NULL,
+    upload_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    expiry_date DATE,
+    status ENUM('approved', 'pending', 'expired'),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- Appointments Table
+CREATE TABLE Appointments (
+    appointment_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    appointment_date DATE NOT NULL,
+    appointment_time TIME NOT NULL,
+    type ENUM('eye_exam', 'consultation'),
+    status ENUM('scheduled', 'completed', 'cancelled'),
+    notes TEXT,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- Shopping Cart Table
+CREATE TABLE Carts (
+    cart_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL UNIQUE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- Cart Items Table
+CREATE TABLE CartItems (
+    cart_item_id INT PRIMARY KEY AUTO_INCREMENT,
+    cart_id INT NOT NULL,
+    variant_id INT NOT NULL,
+    quantity INT NOT NULL,
+    FOREIGN KEY (cart_id) REFERENCES Carts(cart_id),
+    FOREIGN KEY (variant_id) REFERENCES ProductVariants(variant_id)
+);
+
+-- Reviews Table
+CREATE TABLE Reviews (
+    review_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    rating INT CHECK (rating BETWEEN 1 AND 5),
+    comment TEXT,
+    review_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (product_id) REFERENCES Products(product_id)
+);
+
+-- Promotions Table
+CREATE TABLE Promotions (
+    promotion_id INT PRIMARY KEY AUTO_INCREMENT,
+    promotion_code VARCHAR(50) UNIQUE,
+    discount_type ENUM('percentage', 'fixed'),
+    discount_value DECIMAL(10,2),
+    valid_from DATE,
+    valid_to DATE,
+    max_uses INT,
+    used_count INT DEFAULT 0
+);
+
+-- Eye Tests Table
+CREATE TABLE EyeTests (
+    test_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    test_date DATE NOT NULL,
+    results TEXT,
+    optometrist_id INT,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- Frame Measurements Table
+CREATE TABLE FrameMeasurements (
+    measurement_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    pupil_distance DECIMAL(5,2),
+    frame_width DECIMAL(5,2),
+    lens_height DECIMAL(5,2),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- Stock Movement Table (Optional for Inventory Tracking)
+CREATE TABLE StockMovement (
+    movement_id INT PRIMARY KEY AUTO_INCREMENT,
+    variant_id INT NOT NULL,
+    movement_type ENUM('in', 'out'),
+    quantity INT NOT NULL,
+    movement_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (variant_id) REFERENCES ProductVariants(variant_id)
+);
