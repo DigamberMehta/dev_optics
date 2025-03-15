@@ -1,14 +1,12 @@
-import Navbar from '@/components/Navbar'
-import Results from '@/components/result/Results'
-import React from 'react'
+import Results from "@/components/result/Results";
+import React from "react";
 
 const SearchResult = () => {
   return (
     <>
-    <Navbar />
-    <Results />
+      <Results />
     </>
-  )
-}
+  );
+};
 
 export default SearchResult;
