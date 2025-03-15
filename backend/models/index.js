@@ -108,7 +108,7 @@ export {
 };
 
 // If table does not exist, create table
-sequelize.sync({ force: true })
+sequelize.sync({ force: false })
   .then(() => {
     console.log('Database synchronized!');
   })

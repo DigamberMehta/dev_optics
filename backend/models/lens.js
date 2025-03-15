@@ -1,4 +1,3 @@
-// models/lens.js
 import { DataTypes } from 'sequelize';
 
 const LensModel = (sequelize) => {
@@ -8,10 +7,14 @@ const LensModel = (sequelize) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    // Explicitly define the lens type (Single, Bifocal, etc.)
     lens_type: {
-      type: DataTypes.ENUM('single_vision', 'bifocal', 'progressive', 'other'),
+      type: DataTypes.ENUM('single_vision', 'bifocal', 'progressive', 'other', 'plano'),
       allowNull: false,
+    },
+    is_prescription: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      comment: 'Indicates if the lens is prescription or non-prescription (plano)',
     },
     material: {
       type: DataTypes.STRING(50),
@@ -20,7 +23,43 @@ const LensModel = (sequelize) => {
       type: DataTypes.STRING(50),
     },
     power: {
-      type: DataTypes.DECIMAL(4, 2), // e.g., -2.50, +2.00
+      type: DataTypes.DECIMAL(4, 2),
+    },
+    has_anti_reflective_coating: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    has_uv_protection: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    is_polarized: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    has_blue_light_filter: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    is_photochromic: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    is_tinted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    tint_color: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    blue_light_filter_strength: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    coating_type: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
     },
   }, {
     tableName: 'Lenses',

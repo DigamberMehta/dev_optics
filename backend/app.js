@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { sequelize } from "./models/index.js";
+import ProductRoutes from "./routes/product.js";
 
 dotenv.config({});
 
@@ -20,6 +21,7 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+app.use("/api", ProductRoutes);
 
 // Optional: You can add a simple route to check the database connection
 app.get('/api/health', async (req, res) => {

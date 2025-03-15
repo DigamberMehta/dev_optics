@@ -26,6 +26,11 @@ const FrameMeasurementsModel = (sequelize) => {
     style: {
       type: DataTypes.STRING(50),
     },
+    frame_type: {
+      type: DataTypes.ENUM('glasses', 'sunglasses', 'sports', 'fashion'),
+      allowNull: true,
+      comment: 'Categorization of the frame type',
+    },
   }, {
     tableName: 'FrameMeasurements',
     timestamps: false,

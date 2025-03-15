@@ -1,4 +1,3 @@
-// models/product.js
 import { DataTypes } from 'sequelize';
 
 const ProductModel = (sequelize) => {
@@ -12,12 +11,24 @@ const ProductModel = (sequelize) => {
       type: DataTypes.STRING(255),
       allowNull: false,
     },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     price: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
     product_type: {
-      type: DataTypes.ENUM('frame', 'lens', 'complete_glasses', 'sunglasses', 'blue_light_glasses'),
+      type: DataTypes.ENUM(
+        'frame', 
+        'lens', 
+        'prescription_glasses', 
+        'sunglasses', 
+        'blue_light_glasses', 
+        'computer_glasses', 
+        'prescription_sunglasses'
+      ),
       allowNull: false,
     },
     frame_measurement_id: {
@@ -38,7 +49,7 @@ const ProductModel = (sequelize) => {
     },
     images: {
       type: DataTypes.JSON,
-      defaultValue:[],
+      defaultValue: [],
     },
   }, {
     tableName: 'Products',
