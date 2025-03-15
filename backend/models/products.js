@@ -21,12 +21,12 @@ const ProductModel = (sequelize) => {
     },
     product_type: {
       type: DataTypes.ENUM(
-        'frame', 
-        'lens', 
-        'prescription_glasses', 
-        'sunglasses', 
-        'blue_light_glasses', 
-        'computer_glasses', 
+        'frame',
+        'lens',
+        'prescription_glasses',
+        'sunglasses',
+        'blue_light_glasses',
+        'computer_glasses',
         'prescription_sunglasses'
       ),
       allowNull: false,
@@ -49,7 +49,11 @@ const ProductModel = (sequelize) => {
     },
     images: {
       type: DataTypes.JSON,
-      defaultValue: [],
+      defaultValue:[],
+    },
+    gender: { // Added gender field
+      type: DataTypes.ENUM('men', 'women', 'child'),
+      allowNull: true,
     },
   }, {
     tableName: 'Products',

@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(null);
 
-  const backendURL = 'http://localhost/login/api';
+  const backendURL = 'http://localhost/dev_optics/api';
 
   const fetchUser = async () => {
     setIsLoading(true);

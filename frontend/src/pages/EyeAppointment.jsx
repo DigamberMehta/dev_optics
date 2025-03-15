@@ -56,11 +56,11 @@ export default function EyeAppointment({ closeModal }) {
       time: time,
     };
 
-    // const token = localStorage.getItem('token');
-    console.log(token);
+    const token = localStorage.getItem('token');
+    // console.log(token);
 
     try {
-      const response = await fetch('http://localhost/login/api/appointment.php', {
+      const response = await fetch('http://localhost/dev_optics/api/appointment.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
