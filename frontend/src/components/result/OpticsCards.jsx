@@ -1,16 +1,23 @@
 import React from "react";
 import { Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export default function OpticsCards({ products }) {
   console.log(products);
+  const navigate = useNavigate(); // Get the navigate function
+
+  const handleProductClick = (product) => {
+    navigate(`/product/${product.product_id}/${product.slug}`);
+  };
 
   return (
     <div className="grid md:grid-cols-3 grid-cols-2 lg:grid-cols-4 gap-6 p-6">
       {products && products.map((product) => (
         <Card
           key={product.product_id} // Assuming your product objects in the prop have a 'product_id'
-          className="rounded-xl shadow-md bg-white transition-all hover:shadow-lg border-0"
+          className="rounded-xl shadow-md bg-white transition-all hover:shadow-lg border-0 cursor-pointer" // Added cursor-pointer
+          onClick={() => handleProductClick(product)} // Added onClick handler
         >
           <img
             src={product.images && product.images.length > 0 ? product.images[0] : 'placeholder-image-url'} // Use the first image from the 'images' array, or a placeholder

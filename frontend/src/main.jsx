@@ -14,6 +14,7 @@ import CategoryResults from "./components/result/CategoryResults";
 import PriceResults from "./components/result/PriceResults";
 import FrameResult from "./components/result/FrameResult"; // Import FrameResult
 import EyewearforEveryoneResult from "./components/result/EyewearforEveryoneResult";
+import HomePreview from "./components/preview/HomePreview";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: "/EyewearforEveryone/:categoryName", // Add this new route
         element: <EyewearforEveryoneResult />,
+      },
+      {
+        path: "/product/:id/:slug", // Corrected route for HomePreview
+        element: <HomePreview />,
       },
     ],
   },

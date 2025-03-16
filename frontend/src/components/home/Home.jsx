@@ -24,7 +24,7 @@ const Home = () => {
         }
         const data = await response.json();
         setProducts(data); // Store data in state
-        // console.log('Fetched products:', data);
+        console.log('Fetched products:', data);
 
       } catch (error) {
         console.error('Error fetching products:', error);

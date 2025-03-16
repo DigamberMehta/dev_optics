@@ -65,8 +65,9 @@
 .frame{
   font-family: "Manrope", sans-serif;
 }
-
-
+.preview-container{
+  font-family: "Manrope", sans-serif;
+}
 .hide-scrollbar::-webkit-scrollbar {
   display: none; /* Hide scrollbar in WebKit */
   

@@ -17,6 +17,9 @@ const FrameMeasurementsModel = (sequelize) => {
     lens_width: {
       type: DataTypes.DECIMAL(5, 2),
     },
+    lens_height: {
+      type: DataTypes.DECIMAL(5, 2),
+    },
     material: {
       type: DataTypes.STRING(50),
     },
@@ -31,7 +34,11 @@ const FrameMeasurementsModel = (sequelize) => {
       allowNull: true,
       comment: 'Categorization of the frame type',
     },
-    
+    rim_details: {
+      type: DataTypes.ENUM('Full Rim', 'Half Rim', 'Rimless', 'Semi-Rimless', 'Other'), // Added rim_details as ENUM
+      allowNull: true, // You can adjust this based on whether it's a required field
+    },
+
   }, {
     tableName: 'FrameMeasurements',
     timestamps: false,

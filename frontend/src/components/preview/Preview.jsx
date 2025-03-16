@@ -31,7 +31,7 @@ const Preview = () => {
 
   return (
     <div
-      className="w-full h-screen overflow-hidden pt-[120px]"
+      className="w-full h-screen overflow-hidden pt-[100px] preview-container"
       onWheel={handleGlobalScroll}
     >
       <div className="p-10 flex flex-col md:flex-row w-full h-full bg-slate-50">

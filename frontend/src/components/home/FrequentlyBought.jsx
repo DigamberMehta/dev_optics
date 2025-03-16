@@ -1,9 +1,11 @@
 import { useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export default function FrequentlyBought({ products }) {
   const scrollRef = useRef(null);
   const intervalRef = useRef();
+  const navigate = useNavigate(); // Get the navigate function
 
   // Filter products to show only frequently bought items
   const frequentlyBoughtProducts = products ? products.filter(product => product.frequently_bought) : [];
@@ -37,6 +39,10 @@ export default function FrequentlyBought({ products }) {
     return () => clearInterval(intervalRef.current);
   },);
 
+  const handleProductClick = (product) => {
+    navigate(`/product/${product.product_id}/${product.slug}`);
+  };
+
   return (
     <div className="w-full mt-12 mb-12">
       <div className="bg-gradient-to-b from-[#ffdc5f] to-[#FFDCAF] rounded-lg relative">
@@ -66,17 +72,18 @@ export default function FrequentlyBought({ products }) {
             >
               {frequentlyBoughtProducts.map((product) => (
                 <div
-                  key={product.product_id} // Use product_id from your database
-                  className="bg-white rounded-2xl p-4 w-56 flex-none relative shadow-lg"
+                  key={product.product_id}
+                  className="bg-white rounded-2xl p-4 w-56 flex-none relative shadow-lg cursor-pointer" // Added cursor-pointer for visual feedback
+                  onClick={() => handleProductClick(product)} // Added onClick handler
                 >
                   <img
-                    src={product.images[0]} // Assuming images is an array
+                    src={product.images[0]}
                     alt={product.name}
                     className="w-full h-32 object-contain"
                   />
-                  <h3 className="mt-2 text-md">{product.name}</h3> {/* Use product.name */}
-                  <p className="text-sm text-[#8B8FA9]">{product.product_type}</p> {/* Use product.product_type */}
-                  <p className="text-smfont-bold mt-2">₹{product.price}</p> {/* Use product.price */}
+                  <h3 className="mt-2 text-md">{product.name}</h3>
+                  <p className="text-sm text-[#8B8FA9]">{product.product_type}</p>
+                  <p className="text-smfont-bold mt-2">₹{product.price}</p>
                 </div>
               ))}
             </div>
