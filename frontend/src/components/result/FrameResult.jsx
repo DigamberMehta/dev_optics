@@ -6,24 +6,24 @@ import FilterSidebar from './FilterSidebar';
 const FrameResult = () => {
   const { shapeName } = useParams();
   const location = useLocation();
-  const products = location.state?.products || [];
+  const products = location.state?.products ||[];
 
-  let filteredProducts =[];
+  let filteredProducts = [];
+  let title = '';
 
   if (shapeName === 'all') {
     filteredProducts = products.filter(
-      (product) => product.product_type === 'frame'
+      (product) => product?.frame_measurements?.style
     );
+    title = 'All Styled Products';
   } else {
     filteredProducts = products.filter(
       (product) =>
-        product.frame_measurements &&
-        product.frame_measurements.style &&
+        product?.frame_measurements?.style &&
         product.frame_measurements.style.toLowerCase() === shapeName.toLowerCase()
     );
+    title = `Shop By Style: ${shapeName}`;
   }
-
-  const title = shapeName === 'all' ? 'All Frames' : `Shop By Frame Shape: ${shapeName}`;
 
   return (
     <div className="pt-[140px]">
@@ -39,7 +39,7 @@ const FrameResult = () => {
             <OpticsCards products={filteredProducts} />
           ) : (
             <p className="text-center text-gray-500">
-              {shapeName === 'all' ? 'No frame products found.' : `No products found with the shape: ${shapeName}`}
+              {shapeName === 'all' ? 'No styled products found.' : `No products found with the style: ${shapeName}`}
             </p>
           )}
         </div>

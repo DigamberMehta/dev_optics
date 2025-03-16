@@ -17,7 +17,7 @@ export default function EyewearForEveryone({ products }) {
   };
 
   const handleShopAllClick = () => {
-    navigate('/category/eyewear/all', { state: { products } }); // Keep this as is or adjust as needed
+    navigate('/EyewearforEveryone/all', { state: { products } });
   };
 
   return (
