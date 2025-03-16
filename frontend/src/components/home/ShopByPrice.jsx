@@ -2,10 +2,10 @@ import React from "react";
 
 const ShopByPrice = () => {
   const priceOptions = [
-    "$6.95",
-    "Under $20",
-    "Under $30",
-    "Sale",
+    "under 50 Rupees",
+    "Under 100 Rupees",
+    "Under 150  Rupees",
+    "Under 200 Rupees",
   ];
 
   return (

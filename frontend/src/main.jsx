@@ -10,6 +10,7 @@ import CartPage from "./pages/CartPage";
 import { Toaster } from "sonner";
 import HomePage from "./pages/HomePage";
 import Footer from "./components/Footer";
+import Results from "./components/result/Results"; // Import the Results component
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "/cartpage",
         element: <CartPage />,
+      },
+      {
+        path: "/category/:category/:subcategory", // Add this route
+        element: <Results />,
       },
     ],
   },

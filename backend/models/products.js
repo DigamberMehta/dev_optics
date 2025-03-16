@@ -22,12 +22,16 @@ const ProductModel = (sequelize) => {
     product_type: {
       type: DataTypes.ENUM(
         'frame',
-        'lens',
         'prescription_glasses',
         'sunglasses',
         'blue_light_glasses',
         'computer_glasses',
-        'prescription_sunglasses'
+        'prescription_sunglasses',
+        'Eyeglasses',
+        'Reading_Glasses',
+        'Contact_Lenses',
+        'Accessories',
+
       ),
       allowNull: false,
     },
@@ -52,8 +56,16 @@ const ProductModel = (sequelize) => {
       defaultValue:[],
     },
     gender: { // Added gender field
-      type: DataTypes.ENUM('men', 'women', 'child'),
+      type: DataTypes.ENUM('men', 'women', 'kid', 'unisex'),
       allowNull: true,
+    },
+    new_arrivals: { // Added new arrivals field
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    frequently_bought: { // Added frequently brought field
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
   }, {
     tableName: 'Products',

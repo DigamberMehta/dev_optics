@@ -1,68 +1,12 @@
 import { useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const products = [
-  {
-    id: 1,
-    image: "https://d3995ea24pmi7m.cloudfront.net/media/catalog/product/F/T/FT1510UFA1MBLV_1_lar.jpg",
-    brand: "Fastrack",
-    name: "Red Geometric Rimmed Eyeglasses For Men And Women",
-    price: "₹800",
-    rating: null,
-  },
-  {
-    id: 2,
-    image: "https://d3995ea24pmi7m.cloudfront.net/media/catalog/product/p/3/p357bk2_1_lar.jpg",
-    brand: "Fastrack",
-    name: "Black Square Polarized Sunglasses For Men",
-    price: "₹1,600",
-    rating: 4.0,
-  },
-  {
-    id: 3,
-    image: "https://d3995ea24pmi7m.cloudfront.net/media/catalog/product/p/4/p420bk3p_1_lar.jpg",
-    brand: "Tees By Fastrack",
-    name: "Blue Aviator Sunglasses For Men And Women",
-    price: "₹1,250",
-    rating: null,
-  },
-  {
-    id: 4,
-    image: "https://d3995ea24pmi7m.cloudfront.net/media/catalog/product/p/3/p357bk4_1_lar.jpg",
-    brand: "Tees By Fastrack",
-    name: "Grey Wayfarer Polarized Sunglasses For Men And Women",
-    price: "₹1,350",
-    rating: null,
-  },
-  {
-    id: 5,
-    image: "https://d3995ea24pmi7m.cloudfront.net/media/catalog/product/F/T/FT1278WFP6MOLV_1_lar.jpg",
-    brand: "Fastrack",
-    name: "Black Wayfarer Men Sunglasses",
-    price: "₹950",
-    rating: null,
-  },
-  {
-    id: 6,
-    image: "https://d3995ea24pmi7m.cloudfront.net/media/catalog/product/P/5/P513GY5V_1_lar.jpg",
-    brand: "Fastrack",
-    name: "Blue Rectangle Rimmed Eyeglasses For Men And Women",
-    price: "₹1,100",
-    rating: null,
-  },
-  {
-    id: 7,
-    image: "https://d3995ea24pmi7m.cloudfront.net/media/catalog/product/p/3/p357bk2_1_lar.jpg",
-    brand: "Fastrack",
-    name: "Blue Rectangle Rimmed Eyeglasses For Men And Women",
-    price: "₹1,100",
-    rating: null,
-  },
-];
-
-export default function FrequentlyBought() {
+export default function FrequentlyBought({ products }) {
   const scrollRef = useRef(null);
   const intervalRef = useRef();
+
+  // Filter products to show only frequently bought items
+  const frequentlyBoughtProducts = products ? products.filter(product => product.frequently_bought) : [];
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -91,7 +35,7 @@ export default function FrequentlyBought() {
     intervalRef.current = setInterval(autoScroll, 3000);
 
     return () => clearInterval(intervalRef.current);
-  }, []);
+  },);
 
   return (
     <div className="w-full mt-12 mb-12">
@@ -120,26 +64,19 @@ export default function FrequentlyBought() {
               ref={scrollRef}
               className="flex space-x-4 overflow-x-scroll scrollbar-hide scroll-smooth hide-scrollbar relative"
             >
-              {products.map((item) => (
+              {frequentlyBoughtProducts.map((product) => (
                 <div
-                  key={item.id}
+                  key={product.product_id} // Use product_id from your database
                   className="bg-white rounded-2xl p-4 w-56 flex-none relative shadow-lg"
                 >
                   <img
-                    src={item.image}
-                    alt={item.name}
+                    src={product.images[0]} // Assuming images is an array
+                    alt={product.name}
                     className="w-full h-32 object-contain"
                   />
-                  <h3 className="font-bold mt-2">{item.brand}</h3>
-                  <p className="text-sm text-gray-600">{item.name}</p>
-                  {item.rating && (
-                    <p className="text-yellow-500 flex items-center">
-                      {Array.from({ length: item.rating }).map((_, index) => (
-                        <span key={index}>⭐</span>
-                      ))}
-                    </p>
-                  )}
-                  <p className="text-lg font-bold mt-2">{item.price}</p>
+                  <h3 className="mt-2 text-md">{product.name}</h3> {/* Use product.name */}
+                  <p className="text-sm text-[#8B8FA9]">{product.product_type}</p> {/* Use product.product_type */}
+                  <p className="text-smfont-bold mt-2">₹{product.price}</p> {/* Use product.price */}
                 </div>
               ))}
             </div>

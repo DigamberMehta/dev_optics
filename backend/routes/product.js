@@ -17,7 +17,7 @@ router.get('/products', async (req, res) => {
           attributes: ['lens_id', 'lens_type', 'material', 'color', 'power', 'is_prescription'],
         },
       ],
-      attributes: ['product_id', 'name', 'price', 'product_type', 'images', 'gender'], // Added 'gender' to the attributes
+      // Removed the explicit attributes selection for Products model
     });
 
     const formattedProducts = products.map(product => {
@@ -25,10 +25,13 @@ router.get('/products', async (req, res) => {
       return {
         product_id: productData.product_id,
         name: productData.name,
+        description: productData.description, // Included description
         price: productData.price,
         product_type: productData.product_type,
         images: productData.images,
-        gender: productData.gender, // Included the gender field in the response
+        gender: productData.gender,
+        new_arrivals: productData.new_arrivals, // Included new_arrivals
+        frequently_bought: productData.frequently_bought, // Included frequently_bought
         frame_measurement_id: productData.frame_measurement_id,
         lens_id: productData.lens_id,
         frame_measurements: productData.frame ? { temple_length: productData.frame.temple_length, bridge_width: productData.frame.bridge_width, lens_width: productData.frame.lens_width, material: productData.frame.material, color: productData.frame.color, style: productData.frame.style, frame_type: productData.frame.frame_type } : null,
