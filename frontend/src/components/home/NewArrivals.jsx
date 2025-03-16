@@ -15,7 +15,7 @@ export default function NewArrivals({ products }) {
 
   // Filter products to show only new arrivals
   const newArrivalProducts = products ? products.filter(product => product.new_arrivals) : [];
-  console.log('New Arrivals:', newArrivalProducts);
+  // console.log('New Arrivals:', newArrivalProducts);
 
   return (
     <div className="bg-blue-50 p-8 rounded-lg relative">

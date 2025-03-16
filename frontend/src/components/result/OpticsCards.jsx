@@ -3,6 +3,7 @@ import { Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function OpticsCards({ products }) {
+  console.log(products);
 
   return (
     <div className="grid md:grid-cols-3 grid-cols-2 lg:grid-cols-4 gap-6 p-6">

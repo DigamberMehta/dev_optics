@@ -32,7 +32,7 @@ const Login = ({ closeModal }) => { // Receive the closeModal prop
 
   const handleClose = () => {
     setIsVisible(false);
-    setTimeout(closeModal, 300); // Delay closing to allow fade-out
+    closeModal(); // Remove the setTimeout for testing
   };
 
   console.log(user, isLoading, isError);

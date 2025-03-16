@@ -1,12 +1,20 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 
-const ShopByPrice = () => {
+const ShopByPrice = ({ products }) => {
+  const navigate = useNavigate();
   const priceOptions = [
-    "under 50 Rupees",
-    "Under 100 Rupees",
-    "Under 150  Rupees",
-    "Under 200 Rupees",
+    { label: "Under ₹50", value: 50 },
+    { label: "Under ₹100", value: 100 },
+    { label: "Under ₹150", value: 150 },
+    { label: "Under ₹200", value: 200 },
   ];
+
+  const handlePriceClick = (price) => {
+    const routePrice = price.value;
+    const routePath = `/price/0-${routePrice}`;
+    navigate(routePath, { state: { products } });
+  };
 
   return (
     <div className="text-center py-10 mb-12">
@@ -17,8 +25,9 @@ const ShopByPrice = () => {
           <button
             key={index}
             className="w-full lg:w-auto border border-gray-400 px-4 py-3 rounded-lg text-base font-bold hover:bg-gray-200 transition flex items-center justify-center gap-2 lg:px-6 lg:text-lg"
+            onClick={() => handlePriceClick(price)}
           >
-            {price} <span className="text-lg">&rarr;</span>
+            {price.label} <span className="text-lg">&rarr;</span>
           </button>
         ))}
       </div>

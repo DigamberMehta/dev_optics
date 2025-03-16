@@ -3,7 +3,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import OpticsCards from "./OpticsCards";
 import FilterSidebar from "./FilterSidebar";
 
-const Results = () => {
+const CategoryResults = () => {
   const { category, subcategory } = useParams();
   const location = useLocation();
   const products = location.state?.products || []; // Access products from route state
@@ -26,7 +26,7 @@ const Results = () => {
 
       const productTypesToFilter = categoryMapping[formattedSubcategory];
 
-      let filtered =[];
+      let filtered = [];
       if (productTypesToFilter && productTypesToFilter.length > 0) {
         filtered = products.filter(
           (product) =>
@@ -34,21 +34,19 @@ const Results = () => {
             productTypesToFilter.includes(product.product_type)
         );
       } else {
-        // Handle cases where direct mapping might not exist
         filtered = products.filter(
           (product) =>
             product.gender === category &&
             (formattedSubcategory === "Reading Glasses" && product.product_type === "frame" && product.name.toLowerCase().includes("reading")) ||
-            (formattedSubcategory === "Accessories" && product.product_type === "Accessories") // Assuming 'Accessories' product type
+            (formattedSubcategory === "Accessories" && product.product_type === "Accessories")
         );
       }
       setFilteredProducts(filtered);
+    //   console.log(`Filtered products for ${category} - ${formattedSubcategory}:`, filtered);
       setLoading(false);
     } else if (category && subcategory && products.length === 0) {
-      // Handle the case where products might not have been passed (e.g., direct navigation)
-      console.log("Products data not received in Results component.");
+      console.log("Products data not received in CategoryResults component.");
       setLoading(false);
-      // You might want to fetch the data again here if needed
     }
   }, [category, subcategory, products]);
 
@@ -68,4 +66,4 @@ const Results = () => {
   );
 };
 
-export default Results;
+export default CategoryResults;

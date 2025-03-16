@@ -31,6 +31,7 @@ const FrameMeasurementsModel = (sequelize) => {
       allowNull: true,
       comment: 'Categorization of the frame type',
     },
+    
   }, {
     tableName: 'FrameMeasurements',
     timestamps: false,

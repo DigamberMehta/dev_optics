@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function Cart() {
   return (
-    <div className="min-h-screen bg-[#FBF9F7] p-16 pt-[80px]">
+    <div className="min-h-screen bg-[#FBF9F7] p-16 pt-[120px]">
       <header className="flex items-center justify-between pb-6">
         <h1 className="text-2xl font-semibold">Cart (2 items)</h1>
       </header>

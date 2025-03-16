@@ -10,7 +10,10 @@ import CartPage from "./pages/CartPage";
 import { Toaster } from "sonner";
 import HomePage from "./pages/HomePage";
 import Footer from "./components/Footer";
-import Results from "./components/result/Results"; // Import the Results component
+import CategoryResults from "./components/result/CategoryResults";
+import PriceResults from "./components/result/PriceResults";
+import FrameResult from "./components/result/FrameResult"; // Import FrameResult
+import EyewearforEveryoneResult from "./components/result/EyewearforEveryoneResult";
 
 const router = createBrowserRouter([
   {
@@ -38,8 +41,20 @@ const router = createBrowserRouter([
         element: <CartPage />,
       },
       {
-        path: "/category/:category/:subcategory", // Add this route
-        element: <Results />,
+        path: "/category/:category/:subcategory",
+        element: <CategoryResults />,
+      },
+      {
+        path: "/price/:priceRange",
+        element: <PriceResults />,
+      },
+      {
+        path: "/frame-shape/:shapeName", // Add this route
+        element: <FrameResult />,
+      },
+      {
+        path: "/EyewearforEveryone/:categoryName", // Add this new route
+        element: <EyewearforEveryoneResult />,
       },
     ],
   },

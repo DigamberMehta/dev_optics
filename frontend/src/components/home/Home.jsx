@@ -12,7 +12,7 @@ import ShopByCategory from './ShopByCategory';
 import Carousel from './Carousel';
 
 const Home = () => {
-  const [products, setProducts] = useState(); // State to store fetched products
+  const [products, setProducts] = useState(); // Initialize as an empty array
 
   // Fetch products from the backend
   useEffect(() => {
@@ -24,7 +24,8 @@ const Home = () => {
         }
         const data = await response.json();
         setProducts(data); // Store data in state
-        console.log('Fetched products:', data);
+        // console.log('Fetched products:', data);
+
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -41,10 +42,10 @@ const Home = () => {
         <ShopByCategory products={products} /> {/* Pass products to ShopByCategory */}
         <PromotionCarousel />
         <FrequentlyBought products={products} /> {/* Pass products to FrequentlyBought */}
-        <ShopByPrice />
+        <ShopByPrice products={products} /> {/* Pass products to ShopByPrice */}
         <NewArrivals products={products} /> {/* Pass products to NewArrivals */}
-        <FrameShapeShop />
-        <EyewearForEveryone />
+        <FrameShapeShop products={products} />
+        <EyewearForEveryone products={products} />
         <Test />
       </div>
       <Footer />
