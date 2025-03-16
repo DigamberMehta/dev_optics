@@ -6,7 +6,7 @@ import FrameDimension from "./FrameDimension";
 import Description from "./Description";
 import ProductInfo from "./ProductInfo";
 
-const Preview = () => {
+const HomePreview = () => {
   const detailContainerRef = useRef(null);
 
   const handleGlobalScroll = (e) => {
@@ -54,4 +54,4 @@ const Preview = () => {
   );
 };
 
-export default Preview;
+export default HomePreview;
