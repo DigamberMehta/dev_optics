@@ -12,6 +12,7 @@ import ShopByCategory from './ShopByCategory';
 import Carousel from './Carousel';
 import ModelViewer from '@/pages/ModelViewer.jsx';
 import useModelViewerScale from '../../utils/useModelViewerScale';
+import BannerCards from './BannerCards';
 
 const Home = () => {
   const [products, setProducts] = useState();
@@ -66,6 +67,8 @@ const Home = () => {
         </div>
 
         <FrameShapeShop products={products} />
+
+        <BannerCards />
         <EyewearForEveryone products={products} />
         <Test />
       </div>
