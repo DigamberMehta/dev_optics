@@ -1,37 +1,53 @@
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
-const Model = () => {
-  const { scene } = useGLTF("/models/sku_231942.glb"); // Ensure correct model path
+const Model = ({ modelFile, color }) => {
+  const { scene } = useGLTF(modelFile);
+  const modelRef = useRef();
+  const [rotationSpeed, setRotationSpeed] = useState(0.01); // Adjust for desired speed
 
   useEffect(() => {
     scene.traverse((child) => {
       if (child.isMesh) {
-        child.material.color.set("#C0C0C0"); // Set to Silver
-        child.material.metalness = 0.8; // Increase metallic effect
-        child.material.roughness = 0.3; // Reduce roughness for a shinier look
+        child.material.color.set(color);
+        child.material.metalness = 0.8;
+        child.material.roughness = 0.3;
       }
     });
-  }, [scene]);
+  }, [scene, color]);
 
-  return <primitive object={scene} scale={5} />;
+  useFrame(() => {
+    if (modelRef.current) {
+      modelRef.current.rotation.y += rotationSpeed;
+    }
+  });
+
+  return <primitive object={scene} scale={5} ref={modelRef} />;
 };
 
-const ModelViewer = () => {
-  return (
-    <div className="w-full h-screen flex items-center justify-center pt-[100px] mx-auto">
-      <Canvas camera={{ position: [1, 1, 1], fov: 30 }}>
-        {/* Improved Lighting Setup */}
-        <ambientLight intensity={3} /> {/* Brighter ambient light for even coloring */}
-        <directionalLight position={[5, 5, 5]} intensity={3} castShadow />
-        <pointLight position={[-5, 5, 5]} intensity={2} />
-        <spotLight position={[0, 10, 0]} angle={0.3} intensity={3} />
+const ModelViewer = ({ modelFile = "/models/default.glb", color = "#C0C0C0", width }) => {
+  const fixedHeight = "600px";
+  const fixedAspectRatio = 16 / 9;
+  const calculatedFixedWidth = `${parseFloat(fixedHeight) * fixedAspectRatio}px`;
 
-        <Model />
-        <OrbitControls enableZoom={false} />
-      </Canvas>
+  return (
+    <div
+      className="flex items-center justify-center bg-black mx-auto my-10 rounded-[40px]"
+      style={{ width: `${width}%` }}
+    >
+      <div style={{ height: fixedHeight, width: calculatedFixedWidth }}>
+        <Canvas camera={{ position: [1, 1, 1], fov: 20 }}>
+          <ambientLight intensity={3} />
+          <directionalLight position={[5, 5, 5]} intensity={3} castShadow />
+          <pointLight position={[-5, 5, 5]} intensity={2} />
+          <spotLight position={[0, 10, 0]} angle={0.3} intensity={3} />
+
+          <Model modelFile={modelFile} color={color} />
+          <OrbitControls enableZoom={false} />
+        </Canvas>
+      </div>
     </div>
   );
 };

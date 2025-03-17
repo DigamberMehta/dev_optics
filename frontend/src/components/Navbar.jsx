@@ -74,11 +74,7 @@ const Navbar = () => {
 
   return (
     <div className="w-full shadow-lg border-b bg-white z-50 fixed top-0">
-      {/* Top Bar */}
-      <div className="bg-blue-200 text-center py-2 text-sm">
-        <span className="font-semibold">20% Off</span> with Code{" "}
-        <span className="font-bold">LENS20</span>: Blokz®, EyeQLenz™, & Transitions®.
-      </div>
+    
 
       {/* Navbar */}
       <div className="flex items-center justify-between px-6 py-3 relative">
