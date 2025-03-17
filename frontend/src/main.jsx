@@ -15,6 +15,8 @@ import PriceResults from "./components/result/PriceResults";
 import FrameResult from "./components/result/FrameResult"; // Import FrameResult
 import EyewearforEveryoneResult from "./components/result/EyewearforEveryoneResult";
 import HomePreview from "./components/preview/HomePreview";
+ 
+import ModelViewer from "./pages/ModelViewer.jsx";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +63,10 @@ const router = createBrowserRouter([
         path: "/product/:id/:slug", // Corrected route for HomePreview
         element: <HomePreview />,
       },
+      {
+        path: "/preview/3d",
+        element: <ModelViewer />
+      }
     ],
   },
 ]);

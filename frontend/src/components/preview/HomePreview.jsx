@@ -41,8 +41,8 @@ const HomePreview = () => {
     <div
       className="w-full h-screen overflow-hidden pt-[120px]"
     >
-      <div className="p-10 flex flex-col md:flex-row w-full h-full bg-slate-50">
-        <div className="w-full md:w-[40%] h-full">
+      <div className="py-10 px-20 flex flex-col md:flex-row w-full h-full bg-slate-50">
+        <div className="w-full md:w-[40%] h-fit">
           <ImageContainer product={productDetails} /> {/* Pass productDetails as prop */}
         </div>
         <div

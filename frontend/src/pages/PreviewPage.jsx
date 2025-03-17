@@ -1,12 +1,9 @@
-import Preview from "@/components/preview/Preview";
-import React from "react";
+import React from 'react'
 
 const PreviewPage = () => {
   return (
-    <>
-      <Preview />
-    </>
-  );
-};
+    <div>PreviewPage</div>
+  )
+}
 
-export default PreviewPage;
+export default PreviewPage
