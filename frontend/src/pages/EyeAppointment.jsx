@@ -151,7 +151,7 @@ export default function EyeAppointment({ closeModal }) {
               </div>
             </div>
 
-            <Button type="submit" className="w-full bg-[#46BAC8] hover:bg-[#46BAC8]">
+            <Button type="submit" className="w-full bg-[#46BAC8] hover:bg-[#46BAC8] whitespace-nowrap">
               Book Appointment
             </Button>
           </form>
