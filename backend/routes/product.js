@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import {Products, FrameMeasurements, Lens } from '../models/index.js';
+import { Products, FrameMeasurements, Lens } from '../models/index.js';
 
 router.get('/products', async (req, res) => {
   try {
@@ -14,10 +14,9 @@ router.get('/products', async (req, res) => {
         {
           model: Lens,
           as: 'lens',
-          attributes: ['lens_id', 'lens_type', 'material', 'color', 'power', 'is_prescription'],
+          attributes: ['lens_id', 'lens_type', 'material', 'power', 'is_prescription'], // Removed 'color'
         },
       ],
-      // Removed the explicit attributes selection for Products model
     });
 
     const formattedProducts = products.map(product => {
@@ -25,24 +24,40 @@ router.get('/products', async (req, res) => {
       return {
         product_id: productData.product_id,
         name: productData.name,
-        description: productData.description, // Included description
+        description: productData.description,
         price: productData.price,
         product_type: productData.product_type,
         images: productData.images,
         gender: productData.gender,
-        new_arrivals: productData.new_arrivals, // Included new_arrivals
-        frequently_bought: productData.frequently_bought, // Included frequently_bought
+        new_arrivals: productData.new_arrivals,
+        frequently_bought: productData.frequently_bought,
         frame_measurement_id: productData.frame_measurement_id,
         lens_id: productData.lens_id,
-        frame_measurements: productData.frame ? { temple_length: productData.frame.temple_length, bridge_width: productData.frame.bridge_width, lens_width: productData.frame.lens_width, material: productData.frame.material, color: productData.frame.color, style: productData.frame.style, frame_type: productData.frame.frame_type } : null,
-        lens: productData.lens ? { lens_type: productData.lens.lens_type, material: productData.lens.material, color: productData.lens.color, power: productData.lens.power, is_prescription: productData.lens.is_prescription } : null,
-        slug: productData.slug, // Included slug
+        frame_measurements: productData.frame
+          ? {
+              temple_length: productData.frame.temple_length,
+              bridge_width: productData.frame.bridge_width,
+              lens_width: productData.frame.lens_width,
+              material: productData.frame.material,
+              color: productData.frame.color,
+              style: productData.frame.style,
+              frame_type: productData.frame.frame_type,
+            }
+          : null,
+        lens: productData.lens
+          ? {
+              lens_type: productData.lens.lens_type,
+              material: productData.lens.material,
+              power: productData.lens.power,
+              is_prescription: productData.lens.is_prescription,
+            }
+          : null, // Removed 'color' from lens object
+        slug: productData.slug,
       };
     });
 
     res.setHeader('Content-Type', 'application/json');
     res.json(formattedProducts);
-
   } catch (error) {
     console.error('Error fetching products:', error);
     res.status(500).json({ message: 'Failed to fetch products', error: error.message });
@@ -66,6 +81,7 @@ router.get('/products/:id/:slug', async (req, res) => {
         {
           model: Lens,
           as: 'lens',
+          attributes: ['lens_id', 'lens_type', 'material', 'power', 'is_prescription'], // Removed 'color'
         },
       ],
     });

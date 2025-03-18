@@ -24,8 +24,9 @@ const FrameMeasurementsModel = (sequelize) => {
       type: DataTypes.STRING(50),
     },
     color: {
-      type: DataTypes.STRING(50),
-    },
+      type: DataTypes.JSON,
+      allowNull: true,
+    },    
     style: {
       type: DataTypes.STRING(50),
     },

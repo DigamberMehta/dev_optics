@@ -31,6 +31,7 @@ import PromotionsModel from './promotions.js';
 import EyeTestsModel from './eyeTests.js';
 import FrameMeasurementsModel from './frameMeasurements.js';
 import LensModel from './lens.js'; // Import Lens model
+import CustomizationPriceModel from './customizationPrice.js'; // Import CustomizationPrice model
 
 // Initialize Models by passing the sequelize instance
 const Users = UsersModel(sequelize);
@@ -47,6 +48,7 @@ const Promotions = PromotionsModel(sequelize);
 const EyeTests = EyeTestsModel(sequelize);
 const FrameMeasurements = FrameMeasurementsModel(sequelize);
 const Lens = LensModel(sequelize); // Initialize Lens model
+const CustomizationPrice = CustomizationPriceModel(sequelize); // Initialize CustomizationPrice model
 
 Addresses.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 Users.hasMany(Addresses, { foreignKey: 'user_id', onDelete: 'CASCADE' });
@@ -105,6 +107,7 @@ export {
     EyeTests,
     FrameMeasurements,
     Lens,
+    CustomizationPrice // Export the new model
 };
 
 // If table does not exist, create table

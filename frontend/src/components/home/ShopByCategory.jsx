@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion, useAnimation } from "framer-motion";
 
 const categoriesData = {
   men: [
@@ -26,53 +27,74 @@ const categoriesData = {
 
 export default function ShopByCategory({ products }) {
   const [selectedCategory, setSelectedCategory] = useState("men");
-  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const navigate = useNavigate();
+  const controls = useAnimation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const section = document.getElementById("shop-category");
+      if (section) {
+        const rect = section.getBoundingClientRect();
+        if (rect.bottom < window.innerHeight * 0.40) {
+          controls.start({ opacity: 0, y: -20 });
+        } else {
+          controls.start({ opacity: 1, y: 0 });
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [controls]);
 
   const handleSubCategoryClick = (subCategoryName) => {
-    setSelectedSubCategory(subCategoryName);
-    navigate(`/category/${selectedCategory.toLowerCase()}/${subCategoryName.toLowerCase().replace(/ /g, '-')}`, {
-      state: { products: products }, // Pass the products data as route state
-    });
+    navigate(
+      `/category/${selectedCategory.toLowerCase()}/${subCategoryName.toLowerCase().replace(/ /g, "-")}`,
+      {
+        state: { products: products },
+      }
+    );
   };
 
   return (
-    <div>
-      <div className="">
-        <h2 className="text-4xl font-semibold">Shop by Category</h2>
-        <div className="flex space-x-12 mt-4 text-gray-600 font-medium text-xl">
-          {Object.keys(categoriesData).map((category) => (
-            <button
-              key={category}
-              className={`pb-2 border-b-2 ${
-                selectedCategory === category
-                  ? "border-[#46BAC8] text-black"
-                  : "border-transparent"
-              }`}
-              onClick={() => setSelectedCategory(category)}
-            >
-              {category.charAt(0).toUpperCase() + category.slice(1)}
-            </button>
-          ))}
-        </div>
-        <div className="mt-6 flex justify-between flex-wrap">
-          {categoriesData[selectedCategory]?.map((item) => (
-            <div
-              key={item.name}
-              className="text-center mx-auto cursor-pointer"
-              onClick={() => handleSubCategoryClick(item.name)}
-            >
-              <img
-                src={item.img}
-                alt={item.name}
-                className="w-40 h-40 rounded-full border-2 border-gray-300 p-1 mx-auto"
-              />
-              <p className="mt-2 text-xl">{item.name}</p>
-            </div>
-          ))}
-        </div>
+    <motion.div id="shop-category" animate={controls} transition={{ duration: 0.5 }}>
+      <h2 className="text-4xl font-semibold">Shop by Category</h2>
+      <div className="flex space-x-12 mt-4 text-gray-600 font-medium text-xl">
+        {Object.keys(categoriesData).map((category) => (
+          <button
+            key={category}
+            className={`pb-2 border-b-2 transition-all duration-300 ${
+              selectedCategory === category ? "border-[#46BAC8] text-black" : "border-transparent"
+            }`}
+            onClick={() => setSelectedCategory(category)}
+          >
+            {category.charAt(0).toUpperCase() + category.slice(1)}
+          </button>
+        ))}
       </div>
-      {/* Results component will be loaded on the new route */}
-    </div>
+      <motion.div
+        key={selectedCategory}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -30 }}
+        transition={{ duration: 0.5 }}
+        className="mt-6 flex justify-between flex-wrap"
+      >
+        {categoriesData[selectedCategory]?.map((item) => (
+          <div
+            key={item.name}
+            className="text-center mx-auto cursor-pointer"
+            onClick={() => handleSubCategoryClick(item.name)}
+          >
+            <img
+              src={item.img}
+              alt={item.name}
+              className="w-40 h-40 rounded-full border-2 border-gray-300 p-1 mx-auto"
+            />
+            <p className="mt-2 text-xl">{item.name}</p>
+          </div>
+        ))}
+      </motion.div>
+    </motion.div>
   );
 }

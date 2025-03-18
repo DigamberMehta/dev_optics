@@ -15,7 +15,7 @@ import PriceResults from "./components/result/PriceResults";
 import FrameResult from "./components/result/FrameResult"; // Import FrameResult
 import EyewearforEveryoneResult from "./components/result/EyewearforEveryoneResult";
 import HomePreview from "./components/preview/HomePreview";
- 
+
 import ModelViewer from "./pages/ModelViewer.jsx";
 
 const router = createBrowserRouter([

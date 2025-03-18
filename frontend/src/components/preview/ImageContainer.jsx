@@ -1,9 +1,12 @@
+// frontend/src/components/ImageContainer.js
 import React, { useState, useEffect } from "react";
 import { Heart, Share2 } from "lucide-react";
+import CustomizationSidebar from "../cart/CustomizationSidebar";
 
 const ImageContainer = ({ product }) => {
   const [images, setImages] = useState();
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (product && product.images && product.images.length > 0) {
@@ -14,6 +17,68 @@ const ImageContainer = ({ product }) => {
       setSelectedImage(null);
     }
   }, [product]);
+
+  const handleAddToCartClick = () => {
+    if (product && product.product_type === "frame" && product.lens_id === null) {
+      setIsSidebarOpen(true);
+    } else {
+      // Logic to add a complete product directly to the cart
+      console.log("Adding complete product to cart:", product);
+      // You would likely call an API here
+      addToCart(product.product_id);
+    }
+  };
+
+  const handleAddToCartWithCustomization = async (customLensOptions) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/cart/add-custom-frame', { // Added http://
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId: product.product_id, lensOptions: customLensOptions }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Custom product add to cart request received (Frontend):", data);
+        setIsSidebarOpen(false);
+        // Optionally, show a success message or update cart state
+      } else {
+        console.error("Error adding custom product to cart:", data);
+        // Optionally, show an error message
+      }
+    } catch (error) {
+      console.error("Error adding custom product to cart:", error);
+      // Optionally, show an error message
+    }
+  };
+
+  const addToCart = async (productId) => {
+    try {
+      const response = await fetch('http://localhost:3000/api/cart/add', { // Added http://
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Product add to cart request received (Frontend):", data);
+        // Optionally, show a success message or update cart state
+      } else {
+        console.error("Error adding product to cart:", data);
+        // Optionally, show an error message
+      }
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+      // Optionally, show an error message
+    }
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
+  };
 
   if (!product || !product.images || product.images.length === 0) {
     return (
@@ -100,10 +165,24 @@ const ImageContainer = ({ product }) => {
         </button>
 
         {/* Add to Cart - Outlined Button */}
-        <button className="px-16 py-4  text-[#00BFCB] border border-[#00BFCB] rounded-xl shadow-md">
+        <button
+          className="px-16 py-4  text-[#00BFCB] border border-[#00BFCB] rounded-xl shadow-md"
+          onClick={handleAddToCartClick}
+        >
           Add to Cart
         </button>
       </div>
+
+      {/* Customization Sidebar */}
+      {isSidebarOpen && (
+        <div className="fixed top-0 right-0 h-screen w-80 bg-white shadow-lg p-6 z-50 overflow-y-auto">
+          <CustomizationSidebar
+            product={product}
+            onAddToCart={handleAddToCartWithCustomization}
+            onClose={closeSidebar}
+          />
+        </div>
+      )}
     </>
   );
 };

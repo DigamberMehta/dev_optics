@@ -33,10 +33,14 @@ const ModelViewer = ({ modelFile = "/models/default.glb", color = "#C0C0C0", wid
   const calculatedFixedWidth = `${parseFloat(fixedHeight) * fixedAspectRatio}px`;
 
   return (
+    <div className="flex flex-col items-center mt-10">
+      <h1 className=" font-[900] text-3xl text-[#4eabc6]">TRY OUR NEW PRODUCT</h1>
+
     <div
       className="flex items-center justify-center bg-black mx-auto my-10 rounded-[40px]"
       style={{ width: `${width}%` }}
     >
+      
       <div style={{ height: fixedHeight, width: calculatedFixedWidth }}>
         <Canvas camera={{ position: [1, 1, 1], fov: 20 }}>
           <ambientLight intensity={3} />
@@ -48,6 +52,7 @@ const ModelViewer = ({ modelFile = "/models/default.glb", color = "#C0C0C0", wid
           <OrbitControls enableZoom={false} />
         </Canvas>
       </div>
+    </div>
     </div>
   );
 };

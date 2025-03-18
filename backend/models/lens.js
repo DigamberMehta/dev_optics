@@ -17,10 +17,8 @@ const LensModel = (sequelize) => {
       comment: 'Indicates if the lens is prescription or non-prescription (plano)',
     },
     material: {
-      type: DataTypes.STRING(50),
-    },
-    color: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.ENUM('polycarbonate', 'plastic', 'glass', 'trivex'), // Added enum for material
+      allowNull: true,
     },
     power: {
       type: DataTypes.DECIMAL(4, 2),
@@ -50,7 +48,7 @@ const LensModel = (sequelize) => {
       defaultValue: false,
     },
     tint_color: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.ENUM('none', 'gray', 'brown', 'green', 'blue'), // Added enum for tint color
       allowNull: true,
     },
     blue_light_filter_strength: {
