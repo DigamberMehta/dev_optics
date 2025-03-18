@@ -13,6 +13,7 @@ import Carousel from './Carousel';
 import ModelViewer from '@/pages/ModelViewer.jsx';
 import useModelViewerScale from '../../utils/useModelViewerScale';
 import BannerCards from './BannerCards';
+import Banner from '../banners/Banner';
 
 const Home = () => {
   const [products, setProducts] = useState();
@@ -54,9 +55,10 @@ const Home = () => {
         </div>
 
         <FrequentlyBought products={products} />
-        <ShopByPrice products={products} />
-        <NewArrivals products={products} />
 
+        <Banner img={'https://static5.lenskart.com/media/uploads/hustlr-desktop-30-colors-gif.gif'}/>
+        <NewArrivals products={products} />
+        <ShopByPrice products={products} />
         {/* Second Model Viewer */}
         <div ref={modelViewerRefs.current[1]}>
           <ModelViewer
@@ -65,10 +67,12 @@ const Home = () => {
             width={modelViewerWidths[1]}
           />
         </div>
-
-        <FrameShapeShop products={products} />
-
+       
+        <Banner img={' https://static1.lenskart.com/media/desktop/img/Dec22/desk-hust.gif'}/>
         <BannerCards />
+        <FrameShapeShop products={products} />
+      
+
         <EyewearForEveryone products={products} />
         <Test />
       </div>

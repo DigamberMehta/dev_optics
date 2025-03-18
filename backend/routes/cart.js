@@ -1,10 +1,14 @@
 import express from 'express';
 const router = express.Router();
-import { Products, CustomizationPrice } from '../models/index.js';
+import { Products, CustomizationPrice, Carts, CartItems } from '../models/index.js';
 
-// Route to add a complete product to the cart (console log only)
+// Route to add a complete product to the cart
 router.post('/add', async (req, res) => {
-  const { productId } = req.body;
+  const { productId, userId } = req.body; // Assuming userId is passed in the request
+
+  if (!userId) {
+    return res.status(401).json({ message: 'User authentication required.' });
+  }
 
   try {
     const product = await Products.findByPk(productId);
@@ -13,12 +17,25 @@ router.post('/add', async (req, res) => {
       return res.status(404).json({ message: 'Product not found.' });
     }
 
-    return res.status(200).json({
-      message: 'Complete product add to cart request received.',
-      cartItemData: {
-        productId: product.product_id,
-        price: product.price,
-      },
+    // Find or create the user's cart
+    const [cart, created] = await Carts.findOrCreate({
+      where: { user_id: userId },
+    });
+
+    // Create a new cart item
+    const newCartItem = await CartItems.create({
+      cart_id: cart.cart_id,
+      product_id: product.product_id,
+      quantity: 1,
+      base_price: product.price,
+      total_price: product.price, // For complete products, base price and total price are the same
+      customization_price: 0, // No customization for complete products
+      customizations: null, // No customizations
+    });
+
+    return res.status(201).json({
+      message: 'Complete product added to cart successfully.',
+      cartItem: newCartItem,
     });
 
   } catch (error) {
@@ -29,7 +46,11 @@ router.post('/add', async (req, res) => {
 
 // Route to add a custom frame to the cart
 router.post('/add-custom-frame', async (req, res) => {
-  const { productId, lensOptions } = req.body;
+  const { productId, lensOptions, userId } = req.body; // Assuming userId is passed in the request
+
+  if (!userId) {
+    return res.status(401).json({ message: 'User authentication required.' });
+  }
 
   try {
     const frame = await Products.findByPk(productId);
@@ -40,7 +61,7 @@ router.post('/add-custom-frame', async (req, res) => {
 
     let totalPrice = parseFloat(frame.price); // Ensure numeric price
     let customizationPrice = 0;
-    const missingAttributes = []; 
+    const missingAttributes = [];
 
     const adjustments = [
       lensOptions.lens_type && { attribute_name: 'lens_type', attribute_value: lensOptions.lens_type },
@@ -65,10 +86,27 @@ router.post('/add-custom-frame', async (req, res) => {
 
     totalPrice += customizationPrice;
 
-    return res.status(200).json({
-      message: 'Custom frame add to cart request processed.',
-      totalPrice,
-      missingAttributes, 
+    // Find or create the user's cart
+    const [cart, created] = await Carts.findOrCreate({
+      where: { user_id: userId },
+    });
+
+    // Create a new cart item
+    const newCartItem = await CartItems.create({
+      cart_id: cart.cart_id,
+      product_id: productId,
+      quantity: 1,
+      base_price: frame.price,
+      customization_price: customizationPrice,
+      total_price: totalPrice,
+      customizations: lensOptions,
+    });
+
+    return res.status(201).json({
+      message: 'Custom frame added to cart successfully.',
+      cartItem: newCartItem,
+      missingAttributes,
+      totalPrice
     });
 
   } catch (error) {

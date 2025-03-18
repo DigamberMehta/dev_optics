@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react"; // Import useEffect
+import { useState, useEffect, useContext } from "react"; // Import useContext
 import { Link } from "react-router-dom";
 import EyeAppointment from "../pages/EyeAppointment";
 import Login from "../pages/Login"; // Import the Login component
+import AuthContext from "../context/authContext"; // Import AuthContext
 
 const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(null);
@@ -11,10 +12,11 @@ const Navbar = () => {
   const [isAppointmentModalOpen, setIsAppointmentModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // State for login modal
   const [isLoginModalMounted, setIsLoginModalMounted] = useState(false); // To handle mounting and unmounting for transition
+  const { user } = useContext(AuthContext); // Access user from AuthContext
 
   useEffect(() => {
     const rootElement = document.getElementById("root");
-    
+
     if (rootElement) {
       if (isAppointmentModalOpen || isLoginModalOpen) {
         rootElement.style.overflow = "hidden"; // Disable scrolling
@@ -22,7 +24,7 @@ const Navbar = () => {
         rootElement.style.overflow = "auto"; // Re-enable scrolling
       }
     }
-  
+
     // Cleanup function to re-enable scrolling when component unmounts
     return () => {
       if (rootElement) {
@@ -30,7 +32,7 @@ const Navbar = () => {
       }
     };
   }, [isAppointmentModalOpen, isLoginModalOpen]);
-  
+
 
   useEffect(() => {
     if (isLoginModalOpen && !isLoginModalMounted) {
@@ -44,7 +46,6 @@ const Navbar = () => {
   const menus = [
     { name: "EYEGLASSES", subMenu: ["Men", "Women", "Kids"] },
     { name: "SUNGLASSES", subMenu: ["Men", "Women", "Kids"] },
-    { name: "LENSES", subMenu: ["Single Vision", "Progressive"] },
     { name: "SPORTS", subMenu: ["Cycling", "Running", "Swimming"] },
     { name: "BOOK APPOINTMENT" },
   ];
@@ -74,7 +75,7 @@ const Navbar = () => {
 
   return (
     <div className="w-full shadow-lg border-b bg-white z-50 fixed top-0">
-    
+
 
       {/* Navbar */}
       <div className="flex items-center justify-between px-6 py-3 relative">
@@ -137,11 +138,17 @@ const Navbar = () => {
         <div className="hidden lg:flex justify-between w-[200px] ml-5 text-gray-700 text-xl">
           <i className="fa-light fa-camera-viewfinder"></i>
 
-            <i className="fa fa-user user-modal cursor-pointer" onClick={openLoginModal}></i> {/* Added onClick handler */}
+          {user ? (
+            <button className="cursor-pointer font-semibold" onClick={openLoginModal}>
+              {user.name || user.username || 'Profile'} {/* Display user name or username */}
+            </button>
+          ) : (
+            <i className="fa fa-user user-modal cursor-pointer" onClick={openLoginModal}></i>
+          )}
 
           <i className="fa-regular fa-heart"></i>
 
-      <Link to="/cartpage"><i className="fa-regular fa-cart-shopping"></i></Link>
+          <Link to="/cartpage"><i className="fa-regular fa-cart-shopping"></i></Link>
         </div>
 
         {/* Mobile Controls */}

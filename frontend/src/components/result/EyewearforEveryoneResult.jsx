@@ -44,7 +44,7 @@ const EyewearforEveryoneResult = () => {
   }
 
   return (
-    <div className="pt-[140px]">
+    <div className="pt-[120px]">
       <h2 className="text-3xl font-bold text-center mb-6">
         {title}
       </h2>

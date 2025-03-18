@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react'; // Removed useEffect import
+import { createContext, useState, useEffect } from 'react'; // Added useEffect back
 import axios from 'axios';
 
 const AuthContext = createContext();
@@ -9,6 +9,11 @@ export const AuthProvider = ({ children }) => {
   const [isError, setIsError] = useState(null);
 
   const backendURL = 'http://localhost/dev_optics/api';
+
+  // Add useEffect hook to check auth status on mount
+  useEffect(() => {
+    fetchUser();
+  }, []); // Empty dependency array ensures this runs only once on component mount
 
   const fetchUser = async () => {
     setIsLoading(true);
@@ -23,13 +28,13 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const response = await axios.get(`${backendURL}/profile.php`, {
-        headers: { Authorization: `Bearer ${token}` }, // Send token in Authorization header
+        headers: { Authorization: `Bearer ${token}` },
       });
       setUser(response.data.user);
     } catch (error) {
       console.error('Error fetching user:', error.response?.data?.message || error.message);
       setUser(null);
-      localStorage.removeItem('token'); // Clear invalid token
+      localStorage.removeItem('token');
     } finally {
       setIsLoading(false);
     }
@@ -41,13 +46,13 @@ export const AuthProvider = ({ children }) => {
     setIsError(null);
     try {
       const response = await axios.post(`${backendURL}/register.php`, userData);
-      localStorage.setItem('token', response.data.token); // Store the token
-      localStorage.setItem('user', JSON.stringify(response.data.user)); // Store user info
-      await fetchUser(); // Fetch user profile after successful registration
-      return response; // Return the response
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      await fetchUser();
+      return response;
     } catch (error) {
       setIsError(error.response?.data?.message || 'Registration failed');
-      return null; // Return null on error
+      return null;
     } finally {
       setIsLoading(false);
     }
@@ -59,13 +64,13 @@ export const AuthProvider = ({ children }) => {
     setIsError(null);
     try {
       const response = await axios.post(`${backendURL}/login.php`, credentials);
-      localStorage.setItem('token', response.data.token); // Store the token
-      localStorage.setItem('user', JSON.stringify(response.data.user)); // Store user info
-      await fetchUser(); // Fetch user profile after successful login
-      return response; // Return the response
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+      await fetchUser();
+      return response;
     } catch (error) {
       setIsError(error.response?.data?.message || 'Login failed');
-      return null; // Return null on error
+      return null;
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +83,6 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  // Removed the initial useEffect for fetchUser
   return (
     <AuthContext.Provider
       value={{

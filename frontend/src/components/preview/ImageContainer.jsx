@@ -1,12 +1,14 @@
 // frontend/src/components/ImageContainer.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react"; // Import useContext
 import { Heart, Share2 } from "lucide-react";
 import CustomizationSidebar from "../cart/CustomizationSidebar";
+import AuthContext from "../../context/authContext"; // Import AuthContext
 
 const ImageContainer = ({ product }) => {
   const [images, setImages] = useState();
   const [selectedImage, setSelectedImage] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { user } = useContext(AuthContext); // Access user from AuthContext
 
   useEffect(() => {
     if (product && product.images && product.images.length > 0) {
@@ -30,13 +32,22 @@ const ImageContainer = ({ product }) => {
   };
 
   const handleAddToCartWithCustomization = async (customLensOptions) => {
+    if (!user || !user.user_id) {
+      console.error("User not authenticated.");
+      return;
+    }
+
     try {
-      const response = await fetch('http://localhost:3000/api/cart/add-custom-frame', { // Added http://
+      const response = await fetch('http://localhost:3000/api/cart/add-custom-frame', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ productId: product.product_id, lensOptions: customLensOptions }),
+        body: JSON.stringify({
+          productId: product.product_id,
+          lensOptions: customLensOptions,
+          userId: user.user_id, // User ID is being passed here
+        }),
       });
       const data = await response.json();
       if (response.ok) {
@@ -54,13 +65,18 @@ const ImageContainer = ({ product }) => {
   };
 
   const addToCart = async (productId) => {
+    if (!user || !user.user_id) {
+      console.error("User not authenticated.");
+      return;
+    }
+
     try {
-      const response = await fetch('http://localhost:3000/api/cart/add', { // Added http://
+      const response = await fetch('http://localhost:3000/api/cart/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ productId }),
+        body: JSON.stringify({ productId, userId: user.user_id }), // Pass userId here
       });
       const data = await response.json();
       if (response.ok) {
