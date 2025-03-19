@@ -6,7 +6,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login";
 import SearchResult from "./pages/SearchResult";
 import PreviewPage from "./pages/PreviewPage";
-import CartPage from "./pages/CartPage";
 import { Toaster } from "sonner";
 import HomePage from "./pages/HomePage";
 import Footer from "./components/Footer";
@@ -17,6 +16,7 @@ import EyewearforEveryoneResult from "./components/result/EyewearforEveryoneResu
 import HomePreview from "./components/preview/HomePreview";
 
 import ModelViewer from "./pages/ModelViewer.jsx";
+import Cart from "./components/Cart/Cart";
 
 const router = createBrowserRouter([
   {
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/cartpage",
-        element: <CartPage />,
+        element: <Cart />,
       },
       {
         path: "/category/:category/:subcategory",

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from "react"; // Import useCon
 import { Heart, Share2 } from "lucide-react";
 import CustomizationSidebar from "../cart/CustomizationSidebar";
 import AuthContext from "../../context/authContext"; // Import AuthContext
+import { toast } from "sonner"; // Import Sonner
 
 const ImageContainer = ({ product }) => {
   const [images, setImages] = useState();
@@ -34,6 +35,7 @@ const ImageContainer = ({ product }) => {
   const handleAddToCartWithCustomization = async (customLensOptions) => {
     if (!user || !user.user_id) {
       console.error("User not authenticated.");
+      toast.error("Please log in to add to cart.");
       return;
     }
 
@@ -52,14 +54,17 @@ const ImageContainer = ({ product }) => {
       const data = await response.json();
       if (response.ok) {
         console.log("Custom product add to cart request received (Frontend):", data);
+        toast.success("Custom product added to cart!");
         setIsSidebarOpen(false);
         // Optionally, show a success message or update cart state
       } else {
         console.error("Error adding custom product to cart:", data);
+        toast.error(data?.message || "Failed to add custom product to cart.");
         // Optionally, show an error message
       }
     } catch (error) {
       console.error("Error adding custom product to cart:", error);
+      toast.error("Failed to add custom product to cart. Please try again.");
       // Optionally, show an error message
     }
   };
@@ -67,6 +72,7 @@ const ImageContainer = ({ product }) => {
   const addToCart = async (productId) => {
     if (!user || !user.user_id) {
       console.error("User not authenticated.");
+      toast.error("Please log in to add to cart.");
       return;
     }
 
@@ -81,13 +87,16 @@ const ImageContainer = ({ product }) => {
       const data = await response.json();
       if (response.ok) {
         console.log("Product add to cart request received (Frontend):", data);
+        toast.success("Product added to cart!");
         // Optionally, show a success message or update cart state
       } else {
         console.error("Error adding product to cart:", data);
+        toast.error(data?.message || "Failed to add product to cart.");
         // Optionally, show an error message
       }
     } catch (error) {
       console.error("Error adding product to cart:", error);
+      toast.error("Failed to add product to cart. Please try again.");
       // Optionally, show an error message
     }
   };

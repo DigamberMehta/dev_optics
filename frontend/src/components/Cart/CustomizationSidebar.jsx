@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "sonner"; // Import Sonner
 
 const CustomizationSidebar = ({ product, onAddToCart, onClose }) => {
   const [lensType, setLensType] = useState("plano");
@@ -12,6 +13,21 @@ const CustomizationSidebar = ({ product, onAddToCart, onClose }) => {
   const [hasBlueLightFilter, setHasBlueLightFilter] = useState(false);
 
   const handleAddToCart = () => {
+    if (!lensType) {
+      toast.error("Please select a lens type.");
+      return;
+    }
+
+    if ((lensType === "single_vision" || lensType === "bifocal") && !power) {
+      toast.error("Please enter the power for your lenses.");
+      return;
+    }
+
+    if (!material) {
+      toast.error("Please select a lens material.");
+      return;
+    }
+
     const customLensOptions = {
       lens_type: lensType,
       material,
@@ -26,6 +42,7 @@ const CustomizationSidebar = ({ product, onAddToCart, onClose }) => {
       customLensOptions.power = parseFloat(power);
     }
     onAddToCart(customLensOptions);
+    // No success toast here as the API call and success message are handled in the parent component
   };
 
   return (

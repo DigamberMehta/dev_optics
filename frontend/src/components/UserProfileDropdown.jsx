@@ -1,13 +1,20 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../context/authContext";
+import { toast } from "sonner"; // Import Sonner's toast function
 
 const UserProfileDropdown = ({ onClose }) => {
   const { logoutUser } = useContext(AuthContext);
 
-  const handleLogout = () => {
-    logoutUser();
-    onClose(); // Close the dropdown after logout
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      toast.success("Successfully logged out!");
+      onClose(); // Close the dropdown after successful logout
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Failed to logout. Please try again.");
+    }
   };
 
   return (

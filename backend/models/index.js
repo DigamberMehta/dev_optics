@@ -82,6 +82,17 @@ Users.hasOne(Carts, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 CartItems.belongsTo(Carts, { foreignKey: 'cart_id' });
 Carts.hasMany(CartItems, { foreignKey: 'cart_id' });
 
+// Define the association between CartItems and Products
+CartItems.belongsTo(Products, {
+  foreignKey: 'product_id',
+  as: 'product',
+  onDelete: 'CASCADE',
+});
+Products.hasMany(CartItems, {
+  foreignKey: 'product_id',
+  as: 'cartItems',
+});
+
 Reviews.belongsTo(Users, { foreignKey: 'user_id' });
 Users.hasMany(Reviews, { foreignKey: 'user_id' });
 Reviews.belongsTo(Products, { foreignKey: 'product_id' });
