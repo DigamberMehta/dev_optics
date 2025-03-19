@@ -65,13 +65,13 @@ const Navbar = () => {
     <div className="w-full shadow-lg border-b bg-white z-50 fixed top-0">
       <div className="flex items-center justify-between px-6 py-3 relative">
 
-      <div className="text-3xl font-bold text-[#46bac8]">
+      <div className="text-2xl font-bold text-[#46bac8]">
         <Link to="/">Dev Optics</Link>
       </div>
 
         <DesktopMenu menus={menus} openAppointmentModal={openAppointmentModal} />
 
-            <div className="hidden lg:relative lg:block w-72 ml-5">
+            <div className="hidden lg:relative lg:block w-[550px] ml-5">
               <input
                 type="text"
                 placeholder="Search glasses and contact"

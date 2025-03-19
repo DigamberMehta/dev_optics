@@ -18,9 +18,9 @@ const UserProfileDropdown = ({ onClose }) => {
   };
 
   return (
-    <div className="absolute top-full right-0 bg-white shadow-lg rounded-md  w-48 z-20 border">
-      <ul className="py-2">
-        <li>
+    <div className="absolute top-full right-[-30px] bg-white shadow-lg rounded-md  w-48 z-20 border">
+      <ul className="py-2 text-sm">
+        <li className="">
           <Link
             to="/profile"
             className="block px-4 py-2 text-gray-800 hover:bg-gray-100"

@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import { sequelize } from "./models/index.js";
 import ProductRoutes from "./routes/product.js";
 import CartRoutes from "./routes/cart.js";
+import userProfiles from "./routes/userProfile.js";
 dotenv.config({});
 
 const app = express();
@@ -23,6 +24,7 @@ app.listen(PORT, () => {
 });
 app.use("/api", ProductRoutes);
 app.use("/api/cart", CartRoutes);
+app.use("/api/user/profile", userProfiles);
 
 // Optional: You can add a simple route to check the database connection
 app.get('/api/health', async (req, res) => {

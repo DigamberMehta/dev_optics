@@ -16,7 +16,7 @@ export default function OpticsCards({ products }) {
       {products && products.map((product) => (
         <Card
           key={product.product_id} // Assuming your product objects in the prop have a 'product_id'
-          className="rounded-xl shadow-md bg-white transition-all hover:shadow-lg border-0 cursor-pointer" // Added cursor-pointer
+          className="rounded-xl shadow-[0px_4px_10px_rgba(0,0,0,0.10)] bg-white transition-all hover:shadow-lg border-0 cursor-pointer" // Added cursor-pointer
           onClick={() => handleProductClick(product)} // Added onClick handler
         >
           <img

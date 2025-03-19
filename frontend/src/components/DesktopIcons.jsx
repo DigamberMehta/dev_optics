@@ -16,7 +16,7 @@ const DesktopIcons = ({ openLoginModal }) => {
   };
 
   return (
-    <div className="hidden lg:flex justify-between items-center w-[200px] ml-5 text-gray-700 text-xl">
+    <div className="hidden lg:flex justify-between items-center w-[200px] ml-5 text-gray-700 text-xl font-normal ">
        
 
       {user ? (
@@ -29,9 +29,10 @@ const DesktopIcons = ({ openLoginModal }) => {
             }
           }}
         >
-          <button className="cursor-pointer font-semibold">
-            {user.name || user.username || 'Profile'}
-          </button>
+          <span className="cursor-pointer flex flex-col text-[16px]">
+           <span className="text-center">Hello</span> 
+           <span> {user.name || user.username || 'Profile'}</span>
+          </span>
           {isProfileDropdownOpen && <UserProfileDropdown onClose={closeProfileDropdown} />}
         </div>
       ) : (

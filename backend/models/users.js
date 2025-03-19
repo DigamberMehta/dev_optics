@@ -19,6 +19,11 @@ const UsersModel = (sequelize) => {
     },
     phone: {
       type: DataTypes.STRING(20),
+      allowNull: true, // Allow NULL values for phone
+    },
+    address: {
+      type: DataTypes.JSON, // Store address as a JSON object
+      allowNull: true, // Allow NULL values
     },
     created_at: {
       type: DataTypes.DATE,
@@ -33,8 +38,8 @@ const UsersModel = (sequelize) => {
     },
   }, {
     tableName: 'Users',
-    updatedAt: 'updated_at', // To match the schema's column name
-    createdAt: 'created_at', // To match the schema's column name
+    updatedAt: 'updated_at',
+    createdAt: 'created_at',
   });
 
   return Users;

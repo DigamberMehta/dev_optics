@@ -14,7 +14,7 @@ const DesktopMenu = ({ menus, openAppointmentModal }) => {
         >
           {menu.subMenu ? (
             <>
-              <button className="text-gray-700 hover:text-blue-500 font-semibold uppercase">
+              <button className="text-gray-700 hover:text-blue-500 font-normal uppercase text-sm">
                 {menu.name}
               </button>
               {openMenu === menu.name && menu.subMenu && (
@@ -23,7 +23,7 @@ const DesktopMenu = ({ menus, openAppointmentModal }) => {
                     <a
                       key={idx}
                       href="#"
-                      className="block px-4 py-2 hover:bg-blue-100 text-gray-700"
+                      className="block px-4 py-2 hover:bg-blue-100 text-gray-700 text-sm"
                     >
                       {item}
                     </a>
@@ -34,7 +34,7 @@ const DesktopMenu = ({ menus, openAppointmentModal }) => {
           ) : (
             <button
               onClick={openAppointmentModal}
-              className="text-gray-700 hover:text-blue-500 font-semibold uppercase whitespace-nowrap"
+              className="text-gray-700 hover:text-blue-500 font-normal uppercase text-sm whitespace-nowrap"
             >
               {menu.name}
             </button>

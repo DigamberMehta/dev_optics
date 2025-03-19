@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useLocation } from 'react-router-dom';
 import OpticsCards from "./OpticsCards";
 import FilterSidebar from "./FilterSidebar";
+import Banner from "../banners/Banner";
 
 const CategoryResults = () => {
   const { category, subcategory } = useParams();
@@ -55,12 +56,15 @@ const CategoryResults = () => {
   }
 
   return (
-    <div className="flex pt-[140px]">
+    <div className="flex  flex-col">
+      <Banner img={' https://static1.lenskart.com/media/desktop/img/Dec22/desk-hust.gif'}/>
+      <div className="flex">
       <div className="hidden md:block w-1/4 ">
         <FilterSidebar />
       </div>
       <div className="w-full md:w-3/4">
         <OpticsCards products={filteredProducts} category={category} subCategory={subcategory.replace(/-/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')} />
+      </div>
       </div>
     </div>
   );
