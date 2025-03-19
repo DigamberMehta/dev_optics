@@ -18,6 +18,7 @@ import HomePreview from "./components/preview/HomePreview";
 import ModelViewer from "./pages/ModelViewer.jsx";
 import Cart from "./components/Cart/Cart";
 import UserProfile from "./pages/UserProfile";
+import CheckoutPage from "./pages/CheckoutPage";
 
 const router = createBrowserRouter([
   {
@@ -67,7 +68,11 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <UserProfile />
-      }
+      },
+      {
+        path: "/checkout",
+        element: <CheckoutPage />
+      },
     ],
   },
 ]);

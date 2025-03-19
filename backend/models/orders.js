@@ -1,9 +1,6 @@
 // models/orders.js
 import { DataTypes } from 'sequelize';
-// import { sequelize } from './index.js'; // Removed sequelize import
-// import Users from './users.js'; // Import Users model - will be handled in index.js
-// import Addresses from './addresses.js'; // Import Addresses model - will be handled in index.js
-// import Promotions from './promotions.js'; // Import Promotions model - will be handled in index.js
+ 
 
 const OrdersModel = (sequelize) => {
   const Orders = sequelize.define('Orders', {
@@ -16,16 +13,8 @@ const OrdersModel = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Users', // Use the string name here
+        model: 'Users',  
         key: 'user_id',
-      },
-    },
-    address_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Addresses', // Use the string name here
-        key: 'address_id',
       },
     },
     order_date: {

@@ -4,12 +4,14 @@ import { Heart, Share2 } from "lucide-react";
 import CustomizationSidebar from "../cart/CustomizationSidebar";
 import AuthContext from "../../context/authContext"; // Import AuthContext
 import { toast } from "sonner"; // Import Sonner
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const ImageContainer = ({ product }) => {
   const [images, setImages] = useState();
   const [selectedImage, setSelectedImage] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user } = useContext(AuthContext); // Access user from AuthContext
+  const navigate = useNavigate(); // Get the navigate function
 
   useEffect(() => {
     if (product && product.images && product.images.length > 0) {
@@ -105,6 +107,10 @@ const ImageContainer = ({ product }) => {
     setIsSidebarOpen(false);
   };
 
+  const handleBuyNowClick = () => {
+    navigate(`/checkout?productId=${product.product_id}`); // Pass productId as a query parameter
+  };
+
   if (!product || !product.images || product.images.length === 0) {
     return (
       <div className="flex flex-col p-6 items-center bg-white rounded-2xl shadow-md h-fit relative">
@@ -185,7 +191,10 @@ const ImageContainer = ({ product }) => {
       </div>
       <div className="flex items-center justify-around p-4 mt-4 space-x-4">
         {/* Buy Now - Filled Button */}
-        <button className="px-16 py-4 text-white bg-[#00BFCB] hover:bg-[#00A7B2] rounded-xl shadow-md transition duration-300">
+        <button
+          className="px-16 py-4 text-white bg-[#00BFCB] hover:bg-[#00A7B2] rounded-xl shadow-md transition duration-300"
+          onClick={handleBuyNowClick} // Added onClick handler
+        >
           Buy Now
         </button>
 

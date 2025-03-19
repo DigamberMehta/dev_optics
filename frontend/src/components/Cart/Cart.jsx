@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import AuthContext from "@/context/authContext";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState();
@@ -11,6 +12,7 @@ export default function Cart() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate(); // Get the navigate function
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -77,6 +79,10 @@ export default function Cart() {
         return `${friendlyKey}: ${value}`;
       })
       .join(" , ");
+  };
+
+  const handleProceedToCheckout = () => {
+    navigate('/checkout');
   };
 
   if (loading) {
@@ -163,7 +169,10 @@ export default function Cart() {
             </div>
             <button className="text-xl">→</button>
           </Card>
-          <Button className="w-full bg-green-500 text-white py-3 rounded-lg text-lg">
+          <Button
+            className="w-full bg-green-500 text-white py-3 rounded-lg text-lg"
+            onClick={handleProceedToCheckout} // Added onClick handler
+          >
             Proceed To Checkout →
           </Button>
         </div>

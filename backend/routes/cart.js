@@ -179,4 +179,55 @@ router.post('/add-custom-frame', isAuthenticated, async (req, res) => {
   }
 });
 
+// Route to fetch user's cart items for checkout
+router.get('/get-checkout-items', isAuthenticated, async (req, res) => {
+  const { userId } = req.query; // Get userId from query parameters
+
+  try {
+    const cart = await Carts.findOne({
+      where: { user_id: userId },
+    });
+
+    if (!cart) {
+      return res.status(200).json({ items:[], totalItems: 0 }); // Cart is empty
+    }
+
+    const cartItems = await CartItems.findAll({
+      where: { cart_id: cart.cart_id },
+      include: [
+        {
+          model: Products,
+          as: 'product',
+          attributes: ['product_id', 'name', 'price', 'images'], // Select necessary product attributes
+        },
+      ],
+    });
+
+    const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+    return res.status(200).json({ items: cartItems, totalItems });
+  } catch (error) {
+    console.error('Error fetching cart items for checkout:', error);
+    return res.status(500).json({ message: 'Could not fetch cart items for checkout.', error: error.message });
+  }
+});
+
+router.get('/get-single-product/:productId', async (req, res) => {
+  const { productId } = req.params;
+
+  try {
+    const product = await Products.findByPk(productId);
+
+    if (product) {
+      return res.status(200).json(product);
+    } else {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching single product:', error);
+    return res.status(500).json({ message: 'Could not fetch product details.', error: error.message });
+  }
+});
+
 export default router;
+
