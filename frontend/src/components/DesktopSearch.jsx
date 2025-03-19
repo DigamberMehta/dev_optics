@@ -88,7 +88,7 @@ const DesktopSearch = () => {
             {loading ? (
               <div className="px-4 py-2 text-gray-500">Searching...</div>
             ) : searchResults.length > 0 ? (
-              <ul className="max-h-[300px] overflow-y-auto">
+              <ul className="max-h-[300px] overflow-y-auto search-bar">
                 {searchResults.map((product) => (
                   <li
                     key={product.product_id}

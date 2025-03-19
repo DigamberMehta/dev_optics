@@ -91,3 +91,18 @@
 .rdp-day_selected:hover {
   background-color: #3aa4b0;
 }
+.search-bar::-webkit-scrollbar {
+  width: 8px; /* Adjust width as needed */
+  padding: 4px;
+}
+
+.search-bar::-webkit-scrollbar-thumb {
+  background: #888; /* Customize scrollbar color */
+  border-radius: 4px; /* Optional: Round corners */
+  border: none; /* Ensures no border on the thumb */
+}
+
+.search-bar::-webkit-scrollbar-track {
+  background: transparent; /* Makes track background transparent */
+  border: none; /* Hides track border */
+}
