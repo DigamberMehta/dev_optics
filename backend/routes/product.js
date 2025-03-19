@@ -1,8 +1,9 @@
 import express from 'express';
 const router = express.Router();
-import { Products, FrameMeasurements, Lens } from '../models/index.js';
+import { Products, FrameMeasurements, Lens, sequelize } from '../models/index.js';
+import { Op } from 'sequelize'; // Import Op directly from Sequelize
 
-router.get('/products', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const products = await Products.findAll({
       include: [
@@ -14,7 +15,7 @@ router.get('/products', async (req, res) => {
         {
           model: Lens,
           as: 'lens',
-          attributes: ['lens_id', 'lens_type', 'material', 'power', 'is_prescription'], // Removed 'color'
+          attributes: ['lens_id', 'lens_type', 'material', 'power', 'is_prescription'],
         },
       ],
     });
@@ -64,7 +65,7 @@ router.get('/products', async (req, res) => {
   }
 });
 
-router.get('/products/:id/:slug', async (req, res) => {
+router.get('/:id/:slug', async (req, res) => {
   const { id, slug } = req.params;
 
   try {
@@ -96,5 +97,103 @@ router.get('/products/:id/:slug', async (req, res) => {
     return res.status(500).json({ message: 'Internal server error' });
   }
 });
+
+router.get('/search', async (req, res) => {
+  const { q } = req.query;
+
+  if (!q) {
+    return res.status(400).json({ message: 'Search query is required.' });
+  }
+
+  const lowerQuery = q.toLowerCase(); // Convert the search query to lowercase
+
+  try {
+    const results = await Products.findAll({
+      where: {
+        [Op.or]: [
+          {
+            name: {
+              [Op.like]: `%${lowerQuery}%`,
+            },
+          },
+          {
+            description: {
+              [Op.like]: `%${lowerQuery}%`,
+            },
+          },
+          // Add more fields from the Products model to search if needed
+        ],
+      },
+      include: [
+        {
+          model: FrameMeasurements,
+          as: 'frame',
+          where: {
+            [Op.or]: [
+              {
+                style: {
+                  [Op.like]: `%${lowerQuery}%`,
+                },
+              },
+              {
+                material: {
+                  [Op.like]: `%${lowerQuery}%`,
+                },
+              },
+              {
+                color: {
+                  [Op.like]: `%${lowerQuery}%`,
+                },
+              },
+              {
+                frame_type: {
+                  [Op.like]: `%${lowerQuery}%`,
+                },
+              },
+              {
+                rim_details: {
+                  [Op.like]: `%${lowerQuery}%`,
+                },
+              },
+              // Add more fields from FrameMeasurements to search
+            ],
+          },
+          required: false,
+        },
+        {
+          model: Lens,
+          as: 'lens',
+          where: {
+            [Op.or]: [
+              {
+                lens_type: {
+                  [Op.like]: `%${lowerQuery}%`,
+                },
+              },
+              {
+                material: {
+                  [Op.like]: `%${lowerQuery}%`,
+                },
+              },
+              {
+                tint_color: {
+                  [Op.like]: `%${lowerQuery}%`,
+                },
+              },
+              // Add more fields from Lens to search
+            ],
+          },
+          required: false,
+        },
+      ],
+    });
+
+    res.status(200).json(results);
+  } catch (error) {
+    console.error('Error during search:', error);
+    res.status(500).json({ message: 'Error performing search.', error: error.message });
+  }
+});
+
 
 export default router;

@@ -22,7 +22,7 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-app.use("/api", ProductRoutes);
+app.use("/api/products", ProductRoutes);
 app.use("/api/cart", CartRoutes);
 app.use("/api/user/profile", userProfiles);
 

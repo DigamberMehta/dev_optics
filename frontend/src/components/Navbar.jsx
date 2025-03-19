@@ -1,3 +1,4 @@
+// Navbar.jsx
 import React, { useState, useEffect, useContext } from "react";
 import EyeAppointment from "../pages/EyeAppointment";
 import Login from "../pages/Login";
@@ -8,6 +9,7 @@ import MobileSearch from "./MobileSearch";
 import MobileMenu from "./MobileMenu";
 import AuthContext from "../context/authContext";
 import { Link } from "react-router-dom";
+import DesktopSearch from "./DesktopSearch"; // Import DesktopSearch
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -71,14 +73,7 @@ const Navbar = () => {
 
         <DesktopMenu menus={menus} openAppointmentModal={openAppointmentModal} />
 
-            <div className="hidden lg:relative lg:block w-[550px] ml-5">
-              <input
-                type="text"
-                placeholder="Search glasses and contact"
-                className="w-full border rounded-full py-2 px-4 pl-10 focus:outline-none"
-              />
-              <i className="fa fa-search absolute left-3 top-3 text-gray-500"></i>
-          </div>
+        <DesktopSearch />
 
         <DesktopIcons openLoginModal={openLoginModal} />
 
@@ -87,7 +82,7 @@ const Navbar = () => {
           setIsMobileMenuOpen={setIsMobileMenuOpen}
           isSearchOpen={isSearchOpen}
           isMobileMenuOpen={isMobileMenuOpen}
-          openLoginModal={openLoginModal} // Pass openLoginModal
+          openLoginModal={openLoginModal}
         />
       </div>
 
