@@ -212,22 +212,7 @@ router.get('/get-checkout-items', isAuthenticated, async (req, res) => {
   }
 });
 
-router.get('/get-single-product/:productId', async (req, res) => {
-  const { productId } = req.params;
 
-  try {
-    const product = await Products.findByPk(productId);
-
-    if (product) {
-      return res.status(200).json(product);
-    } else {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-  } catch (error) {
-    console.error('Error fetching single product:', error);
-    return res.status(500).json({ message: 'Could not fetch product details.', error: error.message });
-  }
-});
 
 export default router;
 

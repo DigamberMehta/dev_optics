@@ -65,38 +65,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id/:slug', async (req, res) => {
-  const { id, slug } = req.params;
 
-  try {
-    const product = await Products.findOne({
-      where: {
-        product_id: id,
-        slug: slug,
-      },
-      include: [
-        {
-          model: FrameMeasurements,
-          as: 'frame',
-        },
-        {
-          model: Lens,
-          as: 'lens',
-          attributes: ['lens_id', 'lens_type', 'material', 'power', 'is_prescription'], // Removed 'color'
-        },
-      ],
-    });
-
-    if (product) {
-      return res.status(200).json(product);
-    } else {
-      return res.status(404).json({ message: 'Product not found' });
-    }
-  } catch (error) {
-    console.error('Error fetching product:', error);
-    return res.status(500).json({ message: 'Internal server error' });
-  }
-});
 
 router.get('/search', async (req, res) => {
   const { q } = req.query;
@@ -195,5 +164,56 @@ router.get('/search', async (req, res) => {
   }
 });
 
+router.get('/get-single-product/:productId', async (req, res) => {
+  const { productId } = req.params;
+  // console.log('Fetching product details for:', productId);
+
+  try {
+    const product = await Products.findByPk(productId);
+    // console.log(product);
+
+    if (product) {
+      return res.status(200).json(product);
+    } else {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching single product:', error);
+    return res.status(500).json({ message: 'Could not fetch product details.', error: error.message });
+  }
+});
+
+router.get('/:id/:slug', async (req, res) => {
+  const { id, slug } = req.params;
+
+  try {
+    const product = await Products.findOne({
+      where: {
+        product_id: id,
+        slug: slug,
+      },
+      include: [
+        {
+          model: FrameMeasurements,
+          as: 'frame',
+        },
+        {
+          model: Lens,
+          as: 'lens',
+          attributes: ['lens_id', 'lens_type', 'material', 'power', 'is_prescription'], // Removed 'color'
+        },
+      ],
+    });
+
+    if (product) {
+      return res.status(200).json(product);
+    } else {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 export default router;
