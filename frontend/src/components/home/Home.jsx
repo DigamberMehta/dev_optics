@@ -76,7 +76,7 @@ const Home = () => {
         <EyewearForEveryone products={products} />
         <Test />
       </div>
-      <Footer />
+      
     </>
   );
 };
