@@ -6,6 +6,7 @@ import { sequelize } from "./models/index.js";
 import ProductRoutes from "./routes/product.js";
 import CartRoutes from "./routes/cart.js";
 import userProfiles from "./routes/userProfile.js";
+import orderRoutes from "./routes/order.js";
 dotenv.config({});
 
 const app = express();
@@ -28,6 +29,7 @@ app.listen(PORT, () => {
 app.use("/api/products", ProductRoutes);
 app.use("/api/cart", CartRoutes);
 app.use("/api/user/profile", userProfiles);
+app.use("/api/orders", orderRoutes);
 
 // Optional: You can add a simple route to check the database connection
 app.get('/api/health', async (req, res) => {

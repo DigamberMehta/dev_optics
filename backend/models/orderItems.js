@@ -1,8 +1,8 @@
-// models/orderItems.js
+// models/order-item.js
 import { DataTypes } from 'sequelize';
 
-const OrderItemsModel = (sequelize) => {
-  const OrderItems = sequelize.define('OrderItems', {
+const OrderItemModel = (sequelize) => {
+  const OrderItem = sequelize.define('OrderItem', {
     order_item_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -12,32 +12,43 @@ const OrderItemsModel = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Orders', // Use the string name here
+        model: 'Orders',
         key: 'order_id',
       },
     },
-    product_id: { // Changed from variant_id to product_id
+    product_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Products', // Use the string name here
+        model: 'Products',
         key: 'product_id',
       },
     },
     quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 1,
     },
-    unit_price_at_purchase: {
+    total_price: { // Now representing the total price for the item
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
+    customizations: {
+      type: DataTypes.JSON, // Store customization details as a JSON object
+      allowNull: true,
+    },
+    product_name_at_purchase: {
+      type: DataTypes.STRING(255), // Store the product name at the time of order
+      allowNull: false,
+    },
+
   }, {
     tableName: 'OrderItems',
-    timestamps: false,
+    timestamps: true,
+    updatedAt: false,
   });
 
-  return OrderItems;
+  return OrderItem;
 };
 
-export default OrderItemsModel;
+export default OrderItemModel;

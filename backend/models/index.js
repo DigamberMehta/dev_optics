@@ -1,24 +1,23 @@
-import { Sequelize  } from 'sequelize';
+import { Sequelize } from 'sequelize';
 
 const sequelize = new Sequelize('dev_optics', 'root', '', {
-    host: 'localhost',
-    dialect: 'mysql',
-    logging: false,
-  });
+  host: 'localhost',
+  dialect: 'mysql',
+  logging: false,
+});
 
-  // Test Connection
-  (async () => {
-    try {
-      await sequelize.authenticate();
-      console.log('Database connected!');
-    } catch (err) {
-      console.error('Connection failed:', err);
-    }
-  })();
-
+// Test Connection
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Database connected!');
+  } catch (err) {
+    console.error('Connection failed:', err);
+  }
+})();
 
 import UsersModel from './users.js';
-import AddressesModel from './addresses.js';
+// import AddressesModel from './addresses.js'; // Remove Addresses model import
 import ProductsModel from './products.js';
 import OrdersModel from './orders.js';
 import OrderItemsModel from './orderItems.js';
@@ -35,7 +34,7 @@ import CustomizationPriceModel from './customizationPrice.js'; // Import Customi
 
 // Initialize Models by passing the sequelize instance
 const Users = UsersModel(sequelize);
-const Addresses = AddressesModel(sequelize);
+// const Addresses = AddressesModel(sequelize); // Remove Addresses model initialization
 const Products = ProductsModel(sequelize);
 const Orders = OrdersModel(sequelize);
 const OrderItems = OrderItemsModel(sequelize);
@@ -50,8 +49,9 @@ const FrameMeasurements = FrameMeasurementsModel(sequelize);
 const Lens = LensModel(sequelize); // Initialize Lens model
 const CustomizationPrice = CustomizationPriceModel(sequelize); // Initialize CustomizationPrice model
 
-Addresses.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-Users.hasMany(Addresses, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+// Remove Address Associations
+// Addresses.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+// Users.hasMany(Addresses, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
 // Removed Category Relations
 
@@ -64,11 +64,22 @@ Lens.hasMany(Products, { foreignKey: 'lens_id', as: 'products' });
 
 Orders.belongsTo(Users, { foreignKey: 'user_id' });
 Users.hasMany(Orders, { foreignKey: 'user_id' });
-Orders.belongsTo(Addresses, { foreignKey: 'address_id' });
-Addresses.hasMany(Orders, { foreignKey: 'address_id' });
+// Orders.belongsTo(Addresses, { foreignKey: 'address_id' }); // Remove Orders to Addresses association
+// Addresses.hasMany(Orders, { foreignKey: 'address_id' }); // Remove Addresses to Orders association
 
-OrderItems.belongsTo(Orders, { foreignKey: 'order_id' });
-Orders.hasMany(OrderItems, { foreignKey: 'order_id' });
+OrderItems.belongsTo(Orders, { foreignKey: 'order_id', as: 'order' });
+Orders.hasMany(OrderItems, { foreignKey: 'order_id', as: 'orderItems' });
+
+// Define the association between OrderItems and Products
+OrderItems.belongsTo(Products, {
+  foreignKey: 'product_id',
+  as: 'product',
+  onDelete: 'CASCADE',
+});
+Products.hasMany(OrderItems, {
+  foreignKey: 'product_id',
+  as: 'orderItems',
+});
 
 Prescriptions.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 Users.hasMany(Prescriptions, { foreignKey: 'user_id', onDelete: 'CASCADE' });
@@ -103,22 +114,22 @@ Users.hasMany(EyeTests, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
 
 export {
-    sequelize,
-    Users,
-    Addresses,
-    Products,
-    Orders,
-    OrderItems,
-    Prescriptions,
-    Appointments,
-    Carts,
-    CartItems,
-    Reviews,
-    Promotions,
-    EyeTests,
-    FrameMeasurements,
-    Lens,
-    CustomizationPrice // Export the new model
+  sequelize,
+  Users,
+  // Addresses, // Remove Addresses from export
+  Products,
+  Orders,
+  OrderItems,
+  Prescriptions,
+  Appointments,
+  Carts,
+  CartItems,
+  Reviews,
+  Promotions,
+  EyeTests,
+  FrameMeasurements,
+  Lens,
+  CustomizationPrice // Export the new model
 };
 
 // If table does not exist, create table

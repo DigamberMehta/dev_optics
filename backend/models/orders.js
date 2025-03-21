@@ -1,6 +1,6 @@
 // models/orders.js
 import { DataTypes } from 'sequelize';
- 
+
 
 const OrdersModel = (sequelize) => {
   const Orders = sequelize.define('Orders', {
@@ -13,7 +13,7 @@ const OrdersModel = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Users',  
+        model: 'Users',
         key: 'user_id',
       },
     },
@@ -43,6 +43,36 @@ const OrdersModel = (sequelize) => {
         model: 'Promotions', // Use the string name here
         key: 'promotion_id',
       },
+    },
+    // Remove address_id
+    // Add shipping address fields
+    shipping_state: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    shipping_street: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
+    shipping_pincode: {
+      type: DataTypes.STRING(20),
+      allowNull: true,
+    },
+    shipping_district: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    shipping_locality: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+    },
+    shipping_houseNumber: {
+      type: DataTypes.STRING(20),
+      allowNull: true,
+    },
+    shipping_buildingName: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
     },
   }, {
     tableName: 'Orders',

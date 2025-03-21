@@ -9,7 +9,6 @@ import { useNavigate, useSearchParams } from "react-router-dom"; // Import useSe
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -284,12 +283,16 @@ const CheckoutPage = () => {
                   Select your preferred payment method to complete your order.
                 </AlertDialogDescription>
               </AlertDialogHeader>
-              <AlertDialogFooter className="flex flex-col space-y-2 sm:flex-row sm:justify-end">
+              <AlertDialogFooter className="flex flex-col space-y-2 sm:flex-row sm:justify-end items-center ">
                 <Button variant="secondary" onClick={() => setIsPaymentModalOpen(false)}>
                   Pay Now (Coming Soon)
                 </Button>
-                <AlertDialogAction onClick={handleCashOnDelivery}>Cash on Delivery</AlertDialogAction>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <Button className="!mt-0" onClick={handleCashOnDelivery}>
+                  Cash on Delivery
+                </Button>
+                <Button variant="destructive" className="!mt-0" onClick={() => setIsPaymentModalOpen(false)}>
+                  Cancel
+                </Button>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
