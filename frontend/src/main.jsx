@@ -19,6 +19,8 @@ import ModelViewer from "./pages/ModelViewer.jsx";
 import Cart from "./components/Cart/Cart";
 import UserProfile from "./pages/UserProfile";
 import CheckoutPage from "./pages/CheckoutPage";
+import OrderConfirmationPage from "./pages/OrderConfirmationPage";
+import UserOrdersPage from "./pages/UserOrdersPage";
 
 const router = createBrowserRouter([
   {
@@ -72,6 +74,14 @@ const router = createBrowserRouter([
       {
         path: "/checkout",
         element: <CheckoutPage />
+      },
+      {
+        path: "/order-confirmation",
+        element: <OrderConfirmationPage />
+      },
+      {
+        path: "/orders",
+        element: <UserOrdersPage />
       },
     ],
   },
