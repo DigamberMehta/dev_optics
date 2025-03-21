@@ -7,7 +7,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export default function Cart() {
-  const [cartItems, setCartItems] = useState();
+  const [cartItems, setCartItems] = useState(null);
   const [totalItems, setTotalItems] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -85,12 +85,25 @@ export default function Cart() {
     navigate('/checkout');
   };
 
+  const handleContinueShopping = () => {
+    navigate('/');
+  };
+
   if (loading) {
     return <div>Loading cart items...</div>;
   }
 
   if (error) {
     return <div>Error: {error}</div>;
+  }
+
+  if (cartItems && cartItems.length === 0) {
+    return (
+      <div className="min-h-screen bg-[#FBF9F7] p-16 pt-[120px] flex flex-col items-center justify-center">
+        <h1 className="text-2xl font-semibold pb-6">Your cart is empty</h1>
+        <Button onClick={handleContinueShopping}>Continue Shopping</Button>
+      </div>
+    );
   }
 
   return (
@@ -135,8 +148,6 @@ export default function Cart() {
               </div>
             </div>
           ))}
-          {cartItems && cartItems.length === 0 && !loading && <p>Your cart is empty.</p>}
-          {!cartItems && !loading && !error && <p>Your cart is empty.</p>}
         </div>
         {/* Bill Details */}
         <div className="w-2/5 space-y-6">
