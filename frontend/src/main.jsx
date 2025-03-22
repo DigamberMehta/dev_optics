@@ -21,6 +21,7 @@ import UserProfile from "./pages/UserProfile";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderConfirmationPage from "./pages/OrderConfirmationPage";
 import UserOrdersPage from "./pages/UserOrdersPage";
+import OrderStatusPage from "./pages/OrderStatusPage"; // Import OrderStatusPage
 
 const router = createBrowserRouter([
   {
@@ -76,7 +77,11 @@ const router = createBrowserRouter([
         element: <CheckoutPage />
       },
       {
-        path: "/order-confirmation",
+        path: "/order-status/:orderId",
+        element: <OrderStatusPage /> // Changed to OrderStatusPage
+      },
+      {
+        path: "/order-confirmation/:orderId", // Keep this route for the final confirmation
         element: <OrderConfirmationPage />
       },
       {

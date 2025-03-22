@@ -1,5 +1,5 @@
 // frontend/src/components/checkout/ShippingAndPayment.jsx
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +12,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { load } from "@cashfreepayments/cashfree-js";
+import axios from "axios";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import AuthContext from "@/context/AuthContext"; // Adjust the path if needed
 
 const ShippingAndPayment = ({
   userAddress,
@@ -19,10 +24,88 @@ const ShippingAndPayment = ({
   isPaymentModalOpen,
   setIsPaymentModalOpen,
   handleCashOnDelivery,
+  totalAmount,
+  buyNowProduct, // Receive buyNowProduct prop
 }) => {
+  const navigate = useNavigate();
+  const [cashfreeInstance, setCashfreeInstance] = useState(null);
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    console.log("useEffect for initializing Cashfree SDK called");
+    const initializeCashfree = async () => {
+      try {
+        console.log("Attempting to load Cashfree SDK");
+        const cf = await load({
+          mode: process.env.NODE_ENV === 'production' ? "production" : "sandbox",
+        });
+        setCashfreeInstance(cf);
+        console.log("Cashfree SDK loaded successfully:", cf);
+      } catch (error) {
+        console.error("Error loading Cashfree SDK:", error);
+        toast.error("Failed to load payment gateway.");
+      }
+    };
+
+    initializeCashfree();
+  },[]);
+
+  const handlePayWithCashfree = async () => {
+    console.log("handlePayWithCashfree function called");
+    if (!cashfreeInstance) {
+      console.warn("Cashfree instance is not ready yet.");
+      toast.error("Payment gateway not ready.");
+      return;
+    }
+    console.log("Total Amount being sent to backend:", totalAmount);
+    try {
+      console.log("Attempting to create Cashfree order on backend...");
+      let response;
+      if (buyNowProduct && buyNowProduct.length > 0) {
+        const product = buyNowProduct[0];
+        response = await axios.post("http://localhost:3000/api/orders/create-cashfree-buy-now-order", {
+          totalAmount: totalAmount,
+          userId: user?.user_id,
+          shippingAddress: userAddress,
+          productId: product.product_id,
+          quantity: 1,
+          customizations: product.customizations || {},
+        });
+      } else {
+        response = await axios.post("http://localhost:3000/api/orders/create-cashfree-order", {
+          totalAmount: totalAmount,
+          userId: user?.user_id,
+          shippingAddress: userAddress,
+        });
+      }
+      console.log("Backend Response Data:", response.data);
+
+      const sessionId = response.data?.payment_session_id; // Updated key name
+      console.log("Type of payment_session_id:", typeof sessionId);
+      console.log("Value of payment_session_id:", sessionId);
+
+      if (sessionId) {
+        const checkoutOptions = {
+          paymentSessionId: sessionId, // Cashfree SDK expects this key
+          redirectTarget: "_self",
+        };
+        console.log("Payment Session ID received:", sessionId);
+        console.log("Calling cashfreeInstance.checkout with options:", checkoutOptions);
+        cashfreeInstance.checkout(checkoutOptions);
+        console.log("cashfreeInstance.checkout called");
+      } else {
+        toast.error("Failed to initiate payment.");
+        console.error("Cashfree order creation failed:", response.data);
+      }
+    } catch (error) {
+      console.error("Error initiating Cashfree payment:", error);
+      toast.error("Failed to initiate payment.");
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <Card className="border-0 shadow-md">
+      <Card className="p-6 border-0 shadow-md">
         <CardHeader>
           <CardTitle>Shipping Address</CardTitle>
         </CardHeader>
@@ -48,9 +131,9 @@ const ShippingAndPayment = ({
         </CardContent>
       </Card>
 
-      <AlertDialog open={isPaymentModalOpen} onOpenChange={setIsPaymentModalOpen}>
+      <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button className="w-full bg-[#46BAC8] text-white py-3 rounded-lg text-lg">
+          <Button className="w-full bg-blue-500 text-white py-3 rounded-lg text-lg">
             Proceed to Payment
           </Button>
         </AlertDialogTrigger>
@@ -62,15 +145,15 @@ const ShippingAndPayment = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex flex-col space-y-2 sm:flex-row sm:justify-end items-center ">
-            <Button variant="secondary" onClick={() => setIsPaymentModalOpen(false)}>
-              Pay Now (Coming Soon)
-            </Button>
             <Button className="!mt-0" onClick={handleCashOnDelivery}>
               Cash on Delivery
             </Button>
-            <AlertDialogAction  className="!mt-0 bg-red-600 hover:bg-red-700 text-white">
+            <Button className="!mt-0" onClick={handlePayWithCashfree}>
+              Pay with Cashfree
+            </Button>
+            <Button variant="destructive" className="!mt-0" onClick={() => setIsPaymentModalOpen(false)}>
               Cancel
-            </AlertDialogAction>
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

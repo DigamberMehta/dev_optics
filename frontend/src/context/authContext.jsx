@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
     setUser(null);
   };
-  //  console.log(user);
+   console.log(user);
   return (
     <AuthContext.Provider
       value={{

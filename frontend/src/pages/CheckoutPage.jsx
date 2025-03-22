@@ -6,7 +6,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import ShippingAndPayment from "@/components/checkout/ShippingAndPayment";
 import CheckoutItems from "@/components/checkout/CheckoutItems";
 import OrderSummary from "@/components/checkout/OrderSummary";
- 
+
 
 const CheckoutPage = () => {
   const [cartItems, setCartItems] = useState();
@@ -148,12 +148,15 @@ const CheckoutPage = () => {
         </div>
         <div className="w-2/5 space-y-6">
           <OrderSummary calculateTotalPrice={calculateTotalPrice} />
+          {console.log("Calculated Total Price:", calculateTotalPrice())} {/* Add this line */}
           <ShippingAndPayment
             userAddress={userAddress}
             handleProceedToPayment={handleProceedToPayment}
             isPaymentModalOpen={isPaymentModalOpen}
             setIsPaymentModalOpen={setIsPaymentModalOpen}
             handleCashOnDelivery={handleCashOnDelivery}
+            totalAmount={calculateTotalPrice()}
+            buyNowProduct={buyNowProduct} // Pass buyNowProduct here
           />
         </div>
       </div>
