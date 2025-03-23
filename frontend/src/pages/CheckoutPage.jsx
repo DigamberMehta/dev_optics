@@ -115,7 +115,7 @@ const CheckoutPage = () => {
       }
 
       if (response && response.status === 201) {
-        navigate("/order-confirmation", { state: { orderId: response.data.orderId } });
+        navigate(`/order-confirmation/${response.data.orderId}`); // Changed navigate here
       } else {
         setError("Failed to place order.");
       }

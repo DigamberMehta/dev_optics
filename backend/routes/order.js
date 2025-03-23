@@ -242,6 +242,8 @@ router.post('/verify-cashfree-payment', async (req, res) => {
   }
 });
 
+
+// order pages details
 router.get('/user-orders', isAuthenticated, async (req, res) => {
   const userId = req.user.user_id;
 
@@ -265,5 +267,44 @@ router.get('/user-orders', isAuthenticated, async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch user orders with details and images.', error: error.message });
   }
 });
+
+router.get('/get-order-details/:orderId', isAuthenticated, async (req, res) => {
+  const { orderId } = req.params;
+  const userId = req.query.userId; // User ID is now expected in the query
+
+  if (!userId) {
+    return res.status(401).json({ message: 'Unauthorized: User ID not provided in query.' });
+  }
+
+  try {
+    const user = await Users.findByPk(userId);
+    if (!user) {
+      return res.status(401).json({ message: 'Unauthorized: Invalid User ID.' });
+    }
+
+    const order = await Orders.findOne({
+      where: { order_id: orderId, user_id: userId }, // Only allow users to see their own orders
+      include: [{
+        model: OrderItems,
+        as: 'orderItems',
+        include: [{
+          model: Products,
+          as: 'product',
+          attributes: ['product_id', 'name', 'price', 'description', 'images'],
+        }],
+      }],
+    });
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found.' });
+    }
+
+    res.status(200).json(order);
+  } catch (error) {
+    console.error('Error fetching order details:', error);
+    res.status(500).json({ message: 'Failed to fetch order details.', error: error.message });
+  }
+});
+
 
 export default router;

@@ -1,65 +1,121 @@
-// frontend/src/pages/OrderConfirmationPage.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import AuthContext from "@/context/AuthContext";
 
 const OrderConfirmationPage = () => {
   const { orderId } = useParams();
   const [loading, setLoading] = useState(true);
   const [orderData, setOrderData] = useState(null);
   const [error, setError] = useState(null);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    // In a real application, you would likely fetch the complete order details
-    // from your backend using the orderId.
-    // For this basic example, we'll just simulate a successful confirmation.
-    if (orderId) {
+    const fetchOrderDetails = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/orders/get-order-details/${orderId}?userId=${user?.user_id}`
+        );
+        setOrderData(response.data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching order details:", err);
+        setError(err.message || "Failed to fetch order details.");
+        setLoading(false);
+      }
+    };
+
+    if (orderId && user?.user_id) {
+      fetchOrderDetails();
+    } else if (!user?.user_id) {
+      setError("User not authenticated.");
       setLoading(false);
-      setOrderData({ order_id: orderId }); // Just setting the order ID for now
     } else {
       setError("Order ID not found.");
       setLoading(false);
     }
-  }, [orderId]);
+  }, [orderId, user?.user_id]);
 
   if (loading) {
-    return <div>Loading order details...</div>;
+    return <div className="text-center py-10">Loading order details...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="text-center text-red-500 py-10">Error: {error}</div>;
   }
 
   if (!orderData) {
-    return <div>Order confirmation failed.</div>;
+    return <div className="text-center py-10">Order confirmation failed.</div>;
   }
 
   return (
-    <div className="container mx-auto py-10">
-      <Card className="max-w-md mx-auto shadow-md">
+    <div className="container mx-auto py-10 px-4 mt-[100px]">
+      <Card className="w-full mx-auto shadow-md">
         <CardHeader>
-          <CardTitle className="text-2xl font-semibold text-green-500">
+          <CardTitle className="text-2xl font-semibold text-green-500 text-center">
             Order Confirmed!
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-gray-700">
+          <p className="text-center text-gray-700">
             Thank you for your order. Your order has been successfully placed and is being processed.
           </p>
-          <p className="text-lg font-semibold">
+          <p className="text-lg font-semibold text-center">
             Order ID: <span className="text-blue-500">{orderData.order_id}</span>
           </p>
-          {/* In a real application, you would display more order details here,
-             like shipping address, items ordered, total amount, etc. */}
-          <p className="text-sm text-gray-600">
+
+          {orderData.orderItems && orderData.orderItems.length > 0 && (
+            <div className="mt-4">
+              <h3 className="text-lg font-semibold mb-2">Order Items:</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {orderData.orderItems.map((item) => (
+                  <div key={item.order_item_id} className="border rounded-lg p-4 shadow-sm flex flex-col">
+                    {item.product?.images?.length > 0 && (
+                      <img
+                        src={item.product.images[0]}
+                        alt={item.product.name}
+                        className="w-full h-32 object-contain rounded"
+                      />
+                    )}
+                    <h4 className="font-semibold mt-2">{item.product_name_at_purchase}</h4>
+                    <p className="text-gray-600">Quantity: {item.quantity}</p>
+                    <p className="text-gray-600">
+                          Price: ₹{parseFloat(item.total_price).toFixed(2)}
+                        </p>
+
+
+                    {item.customizations && Object.keys(item.customizations).length > 0 && (
+                      <p className="text-sm text-gray-500 mt-1">
+                        <span className="font-semibold">Customizations:</span>{" "}
+                        {Object.entries(item.customizations)
+                          .map(([key, value]) => `${key}: ${String(value)}`)
+                          .join(", ")}
+                      </p>
+                    )}
+
+                    {item.product?.description && (
+                      <p className="text-sm text-gray-500 mt-1">
+                        {item.product.description.substring(0, 80)}...
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <p className="text-sm text-gray-600 text-center">
             You will receive a confirmation email with further details shortly.
           </p>
-          <div className="flex justify-end">
-            <Link to="/" className="mr-2">
+          <div className="flex justify-center space-x-4">
+            <Link to="/">
               <Button variant="outline">Continue Shopping</Button>
             </Link>
-            {/* You might want to link to an order history page */}
+            {/* Optionally, add an order history page link */}
             {/* <Link to="/order-history">
               <Button>View Order History</Button>
             </Link> */}
