@@ -113,7 +113,7 @@ const CustomizationSidebar = ({ product, onAddToCart, onClose }) => {
   );
 
   return (
-    <div className="fixed top-0 right-0 h-full w-[50%] bg-[#FBF9F7] shadow-xl p-8 z-50 transition-transform duration-300 ease-in-out transform translate-x-0 overflow-y-auto hide-scrollbar ">
+    <div className="fixed top-0 right-0 h-full w-full md:w-[50%] bg-[#FBF9F7] shadow-xl p-8 z-50 transition-transform duration-300 ease-in-out transform translate-x-0 overflow-y-auto hide-scrollbar ">
       <button
         onClick={onClose}
         className="absolute top-4 right-5 text-gray-600 hover:text-gray-900"

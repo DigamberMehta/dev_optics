@@ -84,7 +84,7 @@ export default function EyeAppointment({ closeModal }) {
   };
 
   return (
-    <div className="w-[50%] h-[90vh] flex items-center justify-center">
+    <div className="w-full md:w-[50%] h-[90vh] flex items-center justify-center">
       <Card className="w-full p-5 shadow-xl bg-white rounded-2xl relative">
         <Button
           onClick={closeModal}

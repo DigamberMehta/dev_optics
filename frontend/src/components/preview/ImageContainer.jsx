@@ -123,12 +123,12 @@ const ImageContainer = ({ product }) => {
     <>
       <div className="flex flex-col pb-6 items-center bg-white rounded-2xl shadow-md h-fit relative">
         {/* Main Image */}
-        <div className="w-full flex justify-center items-center">
+        <div className="w-[70%] flex justify-center items-center">
           {selectedImage ? (
             <img
               src={selectedImage}
               alt={product ? product.name : "Product"}
-              className="w-96 h-64 object-cover object-center"
+              className="w-96 h-64 object-contain object-center"
             />
           ) : (
             <div>No main image selected</div>
@@ -147,7 +147,7 @@ const ImageContainer = ({ product }) => {
 
         {/* Thumbnail Images */}
         {images && images.length > 0 && (
-          <div className="flex items-center px-4 mt-4 w-full justify-between">
+          <div className="flex items-center px-4 mt-4 w-full justify-center space-x-6 overflow-x-auto hide-scrollbar">
             <button
               className="text-blue-500 hover:text-blue-700"
               onClick={() => {
@@ -165,7 +165,7 @@ const ImageContainer = ({ product }) => {
                 key={index}
                 src={img}
                 alt={`Thumbnail ${index + 1}`}
-                className={`w-16 h-16 p-1 border rounded cursor-pointer object-contain ${
+                className={`w-8 h-8 lg:w-16 lg:h-16 p-1 border  rounded cursor-pointer object-contain ${
                   selectedImage === img ? "border-black" : "border-gray-300"
                 }`}
                 onClick={() => setSelectedImage(img)}
@@ -192,7 +192,7 @@ const ImageContainer = ({ product }) => {
       <div className="flex items-center justify-around p-4 mt-4 space-x-4">
         {/* Buy Now - Filled Button */}
         <button
-          className="px-16 py-4 text-white bg-[#00BFCB] hover:bg-[#00A7B2] rounded-xl shadow-md transition duration-300"
+          className="px-8 md:px-16 py-4 text-white bg-[#00BFCB] hover:bg-[#00A7B2] rounded-xl shadow-md transition duration-300"
           onClick={handleBuyNowClick} // Added onClick handler
         >
           Buy Now
@@ -200,7 +200,7 @@ const ImageContainer = ({ product }) => {
 
         {/* Add to Cart - Outlined Button */}
         <button
-          className="px-16 py-4  text-[#00BFCB] border border-[#00BFCB] rounded-xl shadow-md"
+          className="px-8 md:px-16 py-4  text-[#00BFCB] border border-[#00BFCB] rounded-xl shadow-md"
           onClick={handleAddToCartClick}
         >
           Add to Cart

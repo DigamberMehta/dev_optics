@@ -22,8 +22,9 @@ const UsersModel = (sequelize) => {
       allowNull: true, // Allow NULL values for phone
     },
     address: {
-      type: DataTypes.JSON, // Store address as a JSON object
-      allowNull: true, // Allow NULL values
+      type: DataTypes.JSON,  
+      allowNull: true,
+      defaultValue: [],  
     },
     created_at: {
       type: DataTypes.DATE,
