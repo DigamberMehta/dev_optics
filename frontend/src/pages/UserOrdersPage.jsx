@@ -49,7 +49,7 @@ const UserOrdersPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white p-8 pt-24">
+    <div className="min-h-screen bg-white p-4 md:p-8 pt-24">
       <header className="mb-6 text-center">
         <h1 className="text-3xl font-bold">Your Orders</h1>
       </header>

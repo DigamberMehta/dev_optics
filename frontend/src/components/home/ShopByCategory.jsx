@@ -57,9 +57,11 @@ export default function ShopByCategory({ products }) {
   };
 
   return (
-    <motion.div id="shop-category" animate={controls} transition={{ duration: 0.5 }}>
+    <motion.div id="shop-category" className="md:p-0 p-3" animate={controls} transition={{ duration: 0.5 }}>
       <h2 className="text-4xl font-semibold">Shop by Category</h2>
-      <div className="flex space-x-12 mt-4 text-gray-600 font-medium text-xl">
+
+      {/* Categories Navigation - Using Grid */}
+      <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-4 mt-4 text-gray-600 font-medium text-xl">
         {Object.keys(categoriesData).map((category) => (
           <button
             key={category}
@@ -72,26 +74,24 @@ export default function ShopByCategory({ products }) {
           </button>
         ))}
       </div>
+
+      {/* Subcategories Grid */}
       <motion.div
         key={selectedCategory}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -30 }}
         transition={{ duration: 0.5 }}
-        className="mt-6 flex justify-between flex-wrap"
+        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 mt-6 "
       >
-        {categoriesData[selectedCategory]?.map((item) => (
+        {categoriesData[selectedCategory].map((subCategory) => (
           <div
-            key={item.name}
-            className="text-center mx-auto cursor-pointer"
-            onClick={() => handleSubCategoryClick(item.name)}
+            key={subCategory.name}
+            className="cursor-pointer text-center"
+            onClick={() => handleSubCategoryClick(subCategory.name)}
           >
-            <img
-              src={item.img}
-              alt={item.name}
-              className="w-40 h-40 rounded-full border-2 border-gray-300 p-1 mx-auto"
-            />
-            <p className="mt-2 text-xl">{item.name}</p>
+            <img src={subCategory.img} alt={subCategory.name} className="w-full max-w-[132px] mx-auto border border-gray-200 rounded-[50%] p-2 border-5" />
+            <p className="mt-2 text-lg font-medium">{subCategory.name}</p>
           </div>
         ))}
       </motion.div>

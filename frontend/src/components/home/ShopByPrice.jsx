@@ -17,7 +17,7 @@ const ShopByPrice = ({ products }) => {
   };
 
   return (
-    <div className="text-center py-10 mb-12">
+    <div className="text-center py-10 mb-12 md:px-0 px-3">
       <h2 className="text-3xl font-bold">Shop by Price</h2>
       <p className="text-gray-500 mt-2">Find affordable frames to fit your budget and style.</p>
       <div className="grid grid-cols-2 gap-4 mt-6 lg:flex lg:justify-around">

@@ -42,7 +42,7 @@ export default function Carousel() {
   }, [index]); // Re-run effect when index changes
 
   return (
-    <div className="relative w-full flex items-center justify-center h-[400px] overflow-hidden">
+    <div className="relative w-full flex items-center justify-center h-[300px] md:h-[400px] overflow-hidden px-3 md:p-0">
       <div className="relative w-[80%] flex justify-center items-center perspective-[1500px]">
         {slides.map((slide, i) => {
           const offset = ((i - index + slides.length + slides.length) % slides.length) - 1;
@@ -55,7 +55,7 @@ export default function Carousel() {
           return (
             <motion.div
               key={slide.image}
-              className="absolute w-[100%] h-[300px] rounded-lg shadow-lg flex items-center justify-center text-white"
+              className="absolute w-[100%] h-[250px] md:h-[300px] rounded-lg shadow-lg flex items-center justify-center text-white"
               style={{
                 backgroundImage: `url('${slide.image}')`,
                 backgroundSize: "cover",
@@ -74,7 +74,7 @@ export default function Carousel() {
                   pointerEvents: "none",
                 }}
               >
-                <h3 className="title color-gray-darker absolute bottom-[4rem] left-1 text-black text-[24px] font-[900]">
+                <h3 className="title color-gray-darker absolute bottom-[4rem] left-1 text-black text-[16px] md:text-[24px] font-[900]">
                   {slide.headline.map((line, i) => (
                     <span key={i}>
                       {line}
@@ -82,7 +82,7 @@ export default function Carousel() {
                     </span>
                   ))}
                 </h3>
-                <h3 className="text-3xl mb-1 font-bold bg-black py-1 px-3 rounded-[20px]">
+                <h3 className=" text-lg md:text-3xl mb-1 font-bold bg-black py-1 px-3 rounded-[20px]">
                   {slide.title}
                 </h3>
               </div>

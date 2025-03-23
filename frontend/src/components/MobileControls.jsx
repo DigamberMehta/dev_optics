@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import AuthContext from "../context/authContext";
 import MobileUserProfileDropdown from "./MobileUserProfileDropdown";
+import { Link } from "react-router-dom";
 
 const MobileControls = ({ setIsSearchOpen, setIsMobileMenuOpen, isSearchOpen, isMobileMenuOpen, openLoginModal }) => {
   const { user } = useContext(AuthContext);
@@ -31,7 +32,8 @@ const MobileControls = ({ setIsSearchOpen, setIsMobileMenuOpen, isSearchOpen, is
           <i className="fa fa-user text-gray-700 text-xl"></i>
         </button>
       )}
-      <i className="fa-regular fa-cart-shopping text-gray-700 text-xl"></i>
+     
+     <Link to="cartpage"> <i className="fa-regular fa-cart-shopping text-gray-700 text-xl"></i></Link>
       <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
         <i className="fa fa-bars text-gray-700 text-xl"></i>
       </button>

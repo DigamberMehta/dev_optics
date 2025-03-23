@@ -1,8 +1,6 @@
-// /Users/digamber/Desktop/Optics_Website/frontend/src/components/preview/HomePreview.jsx
 import React, { useEffect, useState } from "react";
 import ImageContainer from "./ImageContainer";
 import Maindetails from "./MainDetails";
-import { Frame } from "lucide-react";
 import FrameDimension from "./FrameDimension";
 import Description from "./Description";
 import ProductInfo from "./ProductInfo";
@@ -38,17 +36,13 @@ const HomePreview = () => {
   }
 
   return (
-    <div
-      className="w-full h-screen overflow-hidden pt-[120px]"
-    >
-      <div className="py-10 px-20 flex flex-col md:flex-row w-full h-full bg-slate-50">
-        <div className="w-full md:w-[40%] h-fit">
+    <div className="w-full pt-[80px] lg:pt-[100px]">
+      <div className="md:py-10 md:px-20 px-4 grid grid-cols-1 lg:grid-cols-2 w-full h-full bg-slate-50 gap-8">
+        <div className="w-full">
           <ImageContainer product={productDetails} /> {/* Pass productDetails as prop */}
         </div>
-        <div
-          className="w-full md:w-[60%] h-full overflow-y-auto hide-scrollbar"
-        >
-          <div className="flex flex-col mx-6">
+        <div className="w-full h-full">
+          <div className="grid gap-6">
             <Maindetails product={productDetails} /> {/* Pass productDetails as prop */}
             <FrameDimension product={productDetails} /> {/* Pass productDetails as prop */}
             <Description product={productDetails} /> {/* Pass productDetails as prop */}

@@ -1,4 +1,3 @@
-// frontend/src/pages/CheckoutPage.jsx
 import React, { useState, useEffect, useContext } from "react";
 import AuthContext from "@/context/authContext";
 import axios from "axios";
@@ -6,6 +5,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import ShippingAndPayment from "@/components/checkout/ShippingAndPayment";
 import CheckoutItems from "@/components/checkout/CheckoutItems";
 import OrderSummary from "@/components/checkout/OrderSummary";
+import { Button } from "@/components/ui/button"
 
 
 const CheckoutPage = () => {
@@ -107,9 +107,7 @@ const CheckoutPage = () => {
           shippingAddress: shippingAddress,
         };
         response = await axios.post("http://localhost:3000/api/orders/create", orderData);
-        if (response.status === 201) {
-          await axios.delete(`http://localhost:3000/api/cart?userId=${user.user_id}`);
-        }
+        // Removed the cart clearing logic here
       } else {
         setError("No items to checkout.");
         setLoading(false);
@@ -130,25 +128,45 @@ const CheckoutPage = () => {
   };
 
   if (loading) {
-    return <div>Loading checkout information...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="text-lg font-medium">Loading checkout information...</div>
+          <div className="text-sm text-muted-foreground mt-2">Please wait while we load your order details</div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-center text-destructive">
+          <div className="text-lg font-medium">Error: {error}</div>
+          <Button className="mt-4" onClick={() => window.location.reload()}>
+            Try Again
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-[#FBF9F7] p-16 pt-[120px]">
+    <div className="min-h-screen bg-[#FBF9F7] p-4 md:p-8 lg:p-16 pt-[80px] md:!pt-[100px]">
       <header className="flex items-center justify-between pb-6">
-        <h1 className="text-2xl font-semibold">Checkout</h1>
+        <h1 className="text-xl md:text-2xl font-semibold">Checkout</h1>
       </header>
-      <div className="flex gap-10">
-        <div className="w-3/5 space-y-6">
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
+        {/* Left Section - Checkout Items */}
+        <div className="lg:col-span-2 space-y-6">
           <CheckoutItems buyNowProduct={buyNowProduct} cartItems={cartItems} />
         </div>
-        <div className="w-2/5 space-y-6">
+
+        {/* Right Section - Order Summary and Payment */}
+        <div className="lg:col-span-1 space-y-6">
           <OrderSummary calculateTotalPrice={calculateTotalPrice} />
-          {console.log("Calculated Total Price:", calculateTotalPrice())} {/* Add this line */}
+
           <ShippingAndPayment
             userAddress={userAddress}
             handleProceedToPayment={handleProceedToPayment}
@@ -156,7 +174,7 @@ const CheckoutPage = () => {
             setIsPaymentModalOpen={setIsPaymentModalOpen}
             handleCashOnDelivery={handleCashOnDelivery}
             totalAmount={calculateTotalPrice()}
-            buyNowProduct={buyNowProduct} // Pass buyNowProduct here
+            buyNowProduct={buyNowProduct}
           />
         </div>
       </div>

@@ -6,7 +6,7 @@ const slides = [
   { id: 1, title: "Big glasses. Small prices.", description: "Trendy oversized glasses and sunglasses.", img: "https://static.zennioptical.com/marketing/campaign/oversized/2025/HP/Frame_Shape_Oversized_carousel_card-lg.png" },
   { id: 2, title: "JRUE HOLIDAY x ZENNI", description: "Eyewear for every champion.", img: "https://static.zennioptical.com/marketing/campaign/JrueHoliday/HP/250225_jrue_hp_2_tile_carousel_v2-sm.png" },
   { id: 3, title: "Stylish and Affordable", description: "Find your perfect pair today.", img: "https://static.zennioptical.com/marketing/campaign/premium_progressive/2025/HP/250212_progressives_carousel_card_xs.png" },
-  { id: 4, title: "Stylish and Affordable", description: "Find your perfect pair today.", img: "https://static.zennioptical.com/marketing/campaign/promotion/2025/lens_promo/250310_LensPromo_HP_promo_tile_xxl.png" }
+   
 ];
 
 const PromotionCarousel = () => {
@@ -20,12 +20,12 @@ const PromotionCarousel = () => {
   };
 
   return (
-    <div className="relative w-full overflow-hidden mt-12">
+    <div className="relative w-full overflow-hidden mt-12 md:block hidden">
       <div className="relative flex items-center justify-center">
         <button onClick={prevSlide} className="absolute left-0 z-10 p-2 bg-white rounded-full shadow-lg">
           <ChevronLeft size={24} />
         </button>
-        <div className="flex w-full h-[300px] items-center justify-center overflow-hidden relative">
+        <div className="flex w-full h-[200px] md:h-[300px] items-center justify-center overflow-hidden relative">
           <AnimatePresence initial={false}>
             {slides.map((slide, i) => {
               const position = (i - index + slides.length) % slides.length;
@@ -50,7 +50,7 @@ const PromotionCarousel = () => {
               return (
                 <motion.div
                   key={slide.id}
-                  className="absolute w-1/3 h-[300px] flex flex-col rounded-lg shadow-lg p-4 justify-around text-black"
+                  className="absolute w-1/3 h-[200px] md:h-[300px] flex flex-col rounded-lg shadow-lg p-4 justify-around text-black"
                   initial={{ x: xPosition, opacity: 0, scale: 0.9 }}
                   animate={{ x: xPosition, opacity, scale }}
                   exit={{ x: xPosition, opacity: 0, scale: 0.9 }}
@@ -58,11 +58,11 @@ const PromotionCarousel = () => {
                   style={{ backgroundImage: `url(${slide.img})`, backgroundSize: "cover", backgroundPosition: "center" }}
                 >
                   <div>
-                    <h2 className="text-2xl font-bold text-black">{slide.title}</h2>
+                    <h2 className=" text-md md:text-2xl font-bold text-black">{slide.title}</h2>
                     <p className="text-black">{slide.description}</p>
                   </div>
                   <div>
-                    <button className="bg-black text-white rounded-lg p-2">Shop Now</button>
+                    <button className="bg-black text-white rounded-lg p-2 text-sm">Shop Now</button>
                   </div>
                 </motion.div>
               );

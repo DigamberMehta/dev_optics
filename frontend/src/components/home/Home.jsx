@@ -40,7 +40,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div className="mx-12 max-w-[1800px] pt-[80px]">
+      <div className=" md:mx-12 max-w-[1800px] pt-[80px]">
         <Carousel />
         <ShopByCategory products={products} />
         <PromotionCarousel />

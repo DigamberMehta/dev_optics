@@ -28,33 +28,43 @@ const Model = ({ modelFile, color }) => {
 };
 
 const ModelViewer = ({ modelFile = "/models/default.glb", color = "#C0C0C0", width }) => {
-  const fixedHeight = "600px";
   const fixedAspectRatio = 16 / 9;
-  const calculatedFixedWidth = `${parseFloat(fixedHeight) * fixedAspectRatio}px`;
+
+  // Define height for different screen sizes
+  const heightMobile = 300;
+  const heightDesktop = 600;
 
   return (
     <div className="flex flex-col items-center mt-10">
-      <h1 className=" font-[900] text-3xl text-[#4eabc6]">TRY OUR NEW PRODUCT</h1>
+      <h1 className="font-[900] text-3xl text-[#4eabc6]">TRY OUR NEW PRODUCT</h1>
 
-    <div
-      className="flex items-center justify-center bg-black mx-auto my-10 rounded-[40px]"
-      style={{ width: `${width}%` }}
-    >
-      
-      <div style={{ height: fixedHeight, width: calculatedFixedWidth }}>
-        <Canvas camera={{ position: [1, 1, 1], fov: 20 }}>
-          <ambientLight intensity={3} />
-          <directionalLight position={[5, 5, 5]} intensity={3} castShadow />
-          <pointLight position={[-5, 5, 5]} intensity={2} />
-          <spotLight position={[0, 10, 0]} angle={0.3} intensity={3} />
+      <div
+        className="flex items-center justify-center bg-black mx-auto my-10 rounded-[40px]"
+        style={{ width: `${width}%` }}
+      >
+        <div
+          className="w-full"
+          style={{
+            height: window.innerWidth < 768 ? `${heightMobile}px` : `${heightDesktop}px`, // Adjust based on screen width
+            width: window.innerWidth < 768
+              ? `${heightMobile * fixedAspectRatio}px`
+              : `${heightDesktop * fixedAspectRatio}px`,
+          }}
+        >
+          <Canvas camera={{ position: [1, 1, 1], fov: 20 }}>
+            <ambientLight intensity={3} />
+            <directionalLight position={[5, 5, 5]} intensity={3} castShadow />
+            <pointLight position={[-5, 5, 5]} intensity={2} />
+            <spotLight position={[0, 10, 0]} angle={0.3} intensity={3} />
 
-          <Model modelFile={modelFile} color={color} />
-          <OrbitControls enableZoom={false} />
-        </Canvas>
+            <Model modelFile={modelFile} color={color} />
+            <OrbitControls enableZoom={false} />
+          </Canvas>
+        </div>
       </div>
-    </div>
     </div>
   );
 };
+
 
 export default ModelViewer;

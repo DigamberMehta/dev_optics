@@ -41,11 +41,11 @@ const BannerCards = () => {
   }, []);
 
   return (
-    <div className="relative flex flex-wrap justify-between overflow-hidden" ref={containerRef}>
-      <div className="relative w-[47%] h-[60vh] overflow-hidden">
+    <div className="relative flex flex-wrap justify-between overflow-hidden p-3 md:p-0" ref={containerRef}>
+      <div className="relative w-[47%] h-[30vh] md:h-[60vh] overflow-hidden">
         <div
           ref={leftCardRef}
-          className="absolute w-full h-full p-6 flex flex-col items-center text-center bg-gray-100 rounded-[40px]"
+          className="absolute w-full h-full p-6 flex flex-col items-center text-center bg-gray-100 rounded-[20px] md:rounded-[40px]"
           style={{
             backgroundImage:
               "url('https://static1.lenskart.com/media/desktop/img/Aug21/Desktop/sun-square.jpg')",
@@ -55,10 +55,10 @@ const BannerCards = () => {
         ></div>
       </div>
 
-      <div className="relative w-[47%] h-[60vh] overflow-hidden">
+      <div className="relative w-[47%] h-[30vh] md:h-[60vh] overflow-hidden">
         <div
           ref={rightCardRef}
-          className="absolute w-full h-full p-6 flex flex-col items-center text-center bg-gray-100 rounded-[40px]"
+          className="absolute w-full h-full p-6 flex flex-col items-center text-center bg-gray-100 rounded-[20px] md:rounded-[40px]"
           style={{
             backgroundImage:
               "url('https://static1.lenskart.com/media/desktop/img/Aug21/Desktop/ce-square.jpg')",

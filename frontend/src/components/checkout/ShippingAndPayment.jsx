@@ -133,7 +133,7 @@ const ShippingAndPayment = ({
 
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button className="w-full bg-blue-500 text-white py-3 rounded-lg text-lg">
+          <Button className="w-full bg-[#46BAC8] hover:bg-[#46BAC8] text-white py-3 rounded-lg text-lg">
             Proceed to Payment
           </Button>
         </AlertDialogTrigger>
