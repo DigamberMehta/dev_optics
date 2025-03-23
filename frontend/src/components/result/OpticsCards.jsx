@@ -12,7 +12,7 @@ export default function OpticsCards({ products }) {
   };
 
   return (
-    <div className="grid md:grid-cols-3 grid-cols-2 lg:grid-cols-4 gap-6 p-6">
+    <div className="grid md:grid-cols-3 grid-cols-2 lg:grid-cols-4 gap-6 px-6">
       {products && products.map((product) => (
         <Card
           key={product.product_id} // Assuming your product objects in the prop have a 'product_id'

@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 import axios from 'axios';
 
 const DesktopSearch = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState();
+  const [searchResults, setSearchResults] = useState(); // Initialize as empty array
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const searchContainerRef = useRef(null);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -56,6 +57,20 @@ const DesktopSearch = () => {
     setSearchQuery(''); // Clear the search query after selecting a result
   };
 
+  const handleSearchSubmit = () => {
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${searchQuery}`); // Navigate to SearchResults page with the query
+      setIsOpen(false); // Close the dropdown
+      setSearchQuery(''); // Clear the input
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && searchQuery.trim()) {
+      handleSearchSubmit();
+    }
+  };
+
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -80,8 +95,9 @@ const DesktopSearch = () => {
           value={searchQuery}
           onChange={handleInputChange}
           onFocus={() => searchQuery.trim() && setIsOpen(true)}
+          onKeyDown={handleKeyDown} // Add onKeyDown handler
         />
-        <i className="fa fa-search absolute left-3 top-3 text-gray-500"></i>
+        <i className="fa fa-search absolute left-3 top-3 text-gray-500 cursor-pointer" onClick={handleSearchSubmit}></i> {/* Make the search icon clickable */}
 
         {isOpen && (
           <div className="absolute top-full left-0 right-0 bg-white shadow-md rounded-md z-50 overflow-hidden">
@@ -114,7 +130,7 @@ const DesktopSearch = () => {
                 ))}
               </ul>
             ) : searchQuery.trim() !== '' ? (
-              <div className="px-4 py-2 text-gray-500">No results found.</div>
+              <div className="px-4 py-2 text-gray-500">No results found. Press Enter to search all results.</div>
             ) : null}
           </div>
         )}
