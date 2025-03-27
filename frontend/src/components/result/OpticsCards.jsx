@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export default function OpticsCards({ products }) {
-  console.log(products);
+  // console.log(products);
   const navigate = useNavigate(); // Get the navigate function
 
   const handleProductClick = (product) => {
@@ -12,7 +12,7 @@ export default function OpticsCards({ products }) {
   };
 
   return (
-    <div className="grid md:grid-cols-3 grid-cols-2 lg:grid-cols-4 gap-6 px-6">
+    <div className="grid md:grid-cols-3 grid-cols-2 lg:grid-cols-4 gap-4">
       {products && products.map((product) => (
         <Card
           key={product.product_id} // Assuming your product objects in the prop have a 'product_id'

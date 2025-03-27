@@ -17,7 +17,6 @@ const sequelize = new Sequelize('dev_optics', 'root', '', {
 })();
 
 import UsersModel from './users.js';
-// import AddressesModel from './addresses.js'; // Remove Addresses model import
 import ProductsModel from './products.js';
 import OrdersModel from './orders.js';
 import OrderItemsModel from './orderItems.js';
@@ -31,10 +30,10 @@ import EyeTestsModel from './eyeTests.js';
 import FrameMeasurementsModel from './frameMeasurements.js';
 import LensModel from './lens.js'; // Import Lens model
 import CustomizationPriceModel from './customizationPrice.js'; // Import CustomizationPrice model
+import WishlistsModel from './wishlists.js'; // Import Wishlists model
 
 // Initialize Models by passing the sequelize instance
 const Users = UsersModel(sequelize);
-// const Addresses = AddressesModel(sequelize); // Remove Addresses model initialization
 const Products = ProductsModel(sequelize);
 const Orders = OrdersModel(sequelize);
 const OrderItems = OrderItemsModel(sequelize);
@@ -48,12 +47,7 @@ const EyeTests = EyeTestsModel(sequelize);
 const FrameMeasurements = FrameMeasurementsModel(sequelize);
 const Lens = LensModel(sequelize); // Initialize Lens model
 const CustomizationPrice = CustomizationPriceModel(sequelize); // Initialize CustomizationPrice model
-
-// Remove Address Associations
-// Addresses.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-// Users.hasMany(Addresses, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-
-// Removed Category Relations
+const Wishlists = WishlistsModel(sequelize); // Initialize Wishlists model
 
 // New Product Relations
 Products.belongsTo(FrameMeasurements, { foreignKey: 'frame_measurement_id', as: 'frame' });
@@ -64,8 +58,6 @@ Lens.hasMany(Products, { foreignKey: 'lens_id', as: 'products' });
 
 Orders.belongsTo(Users, { foreignKey: 'user_id' });
 Users.hasMany(Orders, { foreignKey: 'user_id' });
-// Orders.belongsTo(Addresses, { foreignKey: 'address_id' }); // Remove Orders to Addresses association
-// Addresses.hasMany(Orders, { foreignKey: 'address_id' }); // Remove Addresses to Orders association
 
 OrderItems.belongsTo(Orders, { foreignKey: 'order_id', as: 'order' });
 Orders.hasMany(OrderItems, { foreignKey: 'order_id', as: 'orderItems' });
@@ -112,11 +104,17 @@ Products.hasMany(Reviews, { foreignKey: 'product_id' });
 EyeTests.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 Users.hasMany(EyeTests, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
+// Wishlist Associations
+Wishlists.belongsTo(Users, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+Users.hasMany(Wishlists, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+
+Wishlists.belongsTo(Products, { foreignKey: 'product_id', onDelete: 'CASCADE' });
+Products.hasMany(Wishlists, { foreignKey: 'product_id', onDelete: 'CASCADE' });
+
 
 export {
   sequelize,
   Users,
-  // Addresses, // Remove Addresses from export
   Products,
   Orders,
   OrderItems,
@@ -129,7 +127,8 @@ export {
   EyeTests,
   FrameMeasurements,
   Lens,
-  CustomizationPrice // Export the new model
+  CustomizationPrice,
+  Wishlists // Export the Wishlists model
 };
 
 // If table does not exist, create table

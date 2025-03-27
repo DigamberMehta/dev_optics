@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import OpticsCards from './OpticsCards';
 import FilterSidebar from './FilterSidebar';
@@ -6,24 +6,34 @@ import FilterSidebar from './FilterSidebar';
 const FrameResult = () => {
   const { shapeName } = useParams();
   const location = useLocation();
-  const products = location.state?.products ||[];
+  const products = location.state?.products || [];
+  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [title, setTitle] = useState('');
 
-  let filteredProducts = [];
-  let title = '';
+  useEffect(() => {
+    let initialFilteredProducts = [];
+    let newTitle = '';
 
-  if (shapeName === 'all') {
-    filteredProducts = products.filter(
-      (product) => product?.frame_measurements?.style
-    );
-    title = 'All Styled Products';
-  } else {
-    filteredProducts = products.filter(
-      (product) =>
-        product?.frame_measurements?.style &&
-        product.frame_measurements.style.toLowerCase() === shapeName.toLowerCase()
-    );
-    title = `Shop By Style: ${shapeName}`;
-  }
+    if (shapeName === 'all') {
+      initialFilteredProducts = products.filter(
+        (product) => product?.frame_measurements?.style
+      );
+      newTitle = 'All Styled Products';
+    } else {
+      initialFilteredProducts = products.filter(
+        (product) =>
+          product?.frame_measurements?.style &&
+          product.frame_measurements.style.toLowerCase() === shapeName.toLowerCase()
+      );
+      newTitle = `Shop By Style: ${shapeName}`;
+    }
+    setFilteredProducts(initialFilteredProducts);
+    setTitle(newTitle);
+  }, [shapeName, products]);
+
+  const handleFilterChange = (newFilteredProducts) => {
+    setFilteredProducts(newFilteredProducts);
+  };
 
   return (
     <div className="pt-[140px]">
@@ -31,10 +41,10 @@ const FrameResult = () => {
         {title}
       </h2>
       <div className="flex">
-        <div className="hidden md:block w-1/4 ">
-          <FilterSidebar />
+        <div className="hidden md:block w-1/4 border-2 border-gray-200 p-2">
+          <FilterSidebar products={products} onFilterChange={handleFilterChange} />
         </div>
-        <div className="w-full md:w-3/4">
+        <div className="w-full md:w-3/4 border-2 border-gray-200 p-2">
           {filteredProducts.length > 0 ? (
             <OpticsCards products={filteredProducts} />
           ) : (
