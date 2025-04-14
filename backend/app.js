@@ -7,6 +7,8 @@ import ProductRoutes from "./routes/product.js";
 import CartRoutes from "./routes/cart.js";
 import userProfiles from "./routes/userProfile.js";
 import orderRoutes from "./routes/order.js";
+import UserRoute from "./routes/user.route.js";
+import adminRoutes from "./routes/admin.route.js";
 // import WishlistsModel from "./models/wishlists.js";
 dotenv.config({});
 
@@ -31,6 +33,10 @@ app.use("/api/products", ProductRoutes);
 app.use("/api/cart", CartRoutes);
 app.use("/api/user/profile", userProfiles);
 app.use("/api/orders", orderRoutes);
+app.use("/api", UserRoute);
+app.use("/api/admin", adminRoutes);
+
+
 // app.use("/api/wishlist" , WishlistsModel);
 
 // Optional: You can add a simple route to check the database connection

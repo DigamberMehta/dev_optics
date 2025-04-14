@@ -8,7 +8,8 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(null);
 
-  const backendURL = 'http://localhost/dev_optics/api';
+ 
+const backendURL = 'http://localhost:3000/api';
 
   // Add useEffect hook to check auth status on mount
   useEffect(() => {
@@ -27,7 +28,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await axios.get(`${backendURL}/profile.php`, {
+      const response = await axios.get(`${backendURL}/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser(response.data.user);
@@ -45,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     setIsError(null);
     try {
-      const response = await axios.post(`${backendURL}/register.php`, userData);
+      const response = await axios.post(`${backendURL}/register`, userData);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       await fetchUser();
@@ -63,7 +64,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     setIsError(null);
     try {
-      const response = await axios.post(`${backendURL}/login.php`, credentials);
+      const response = await axios.post(`${backendURL}/login`, credentials);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       await fetchUser();
