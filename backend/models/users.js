@@ -19,12 +19,17 @@ const UsersModel = (sequelize) => {
     },
     phone: {
       type: DataTypes.STRING(20),
-      allowNull: true, // Allow NULL values for phone
+      allowNull: true,
     },
     address: {
-      type: DataTypes.JSON,  
+      type: DataTypes.JSON,
       allowNull: true,
-      defaultValue: [],  
+      defaultValue: [],
+    },
+    admin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
     created_at: {
       type: DataTypes.DATE,
@@ -32,13 +37,15 @@ const UsersModel = (sequelize) => {
     },
     updated_at: {
       type: DataTypes.DATE,
-      onUpdate: DataTypes.NOW,
+      defaultValue: DataTypes.NOW,
     },
     last_login: {
       type: DataTypes.DATE,
+      allowNull: true,
     },
   }, {
     tableName: 'Users',
+    timestamps: true,
     updatedAt: 'updated_at',
     createdAt: 'created_at',
   });

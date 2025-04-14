@@ -21,6 +21,7 @@
     "mongoose": "^8.9.3",
     "mysql2": "^3.13.0",
     "sequelize": "^6.37.6",
-    "slugify": "^1.6.6"
+    "slugify": "^1.6.6",
+    "tedious": "^18.6.1"
   }
 }

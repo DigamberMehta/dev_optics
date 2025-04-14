@@ -23,6 +23,7 @@ import OrderConfirmationPage from "./pages/OrderConfirmationPage";
 import UserOrdersPage from "./pages/UserOrdersPage";
 import OrderStatusPage from "./pages/OrderStatusPage"; // Import OrderStatusPage
 import SearchResults from "./components/result/SearchResults";
+import WishlistPage from "./pages/WishlistPage";
 
 const router = createBrowserRouter([
   {
@@ -92,6 +93,10 @@ const router = createBrowserRouter([
       {
         path: "/search",
         element: <SearchResults />
+      },
+      {
+        path: "/wishlist",
+        element: <WishlistPage />
       },
     ],
   },

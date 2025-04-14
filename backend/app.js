@@ -7,6 +7,7 @@ import ProductRoutes from "./routes/product.js";
 import CartRoutes from "./routes/cart.js";
 import userProfiles from "./routes/userProfile.js";
 import orderRoutes from "./routes/order.js";
+// import WishlistsModel from "./models/wishlists.js";
 dotenv.config({});
 
 const app = express();
@@ -30,6 +31,7 @@ app.use("/api/products", ProductRoutes);
 app.use("/api/cart", CartRoutes);
 app.use("/api/user/profile", userProfiles);
 app.use("/api/orders", orderRoutes);
+// app.use("/api/wishlist" , WishlistsModel);
 
 // Optional: You can add a simple route to check the database connection
 app.get('/api/health', async (req, res) => {
