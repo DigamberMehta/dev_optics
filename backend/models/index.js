@@ -16,10 +16,13 @@ import CustomizationPriceModel from './customizationPrice.js';
 
  
 
-const sequelize = new Sequelize('mysql://root:iJZomFXAUpHEsiTezsiDqfjiAXVdUeqs@gondola.proxy.rlwy.net:39615/railway', {
+const sequelize = new Sequelize('railway', 'root', 'iJZomFXAUpHEsiTezsiDqfjiAXVdUeqs', {
+  host: 'gondola.proxy.rlwy.net',
+  port: 39615,
   dialect: 'mysql',
   logging: false,
 });
+
 
 // Test connection
 (async () => {
