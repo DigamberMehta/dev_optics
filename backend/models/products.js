@@ -1,5 +1,4 @@
 import { DataTypes } from 'sequelize';
-import slugify from 'slugify';
 
 const ProductModel = (sequelize) => {
   const Product = sequelize.define(
@@ -78,45 +77,8 @@ const ProductModel = (sequelize) => {
     {
       tableName: 'Products',
       timestamps: true,
-      hooks: {
-        beforeCreate: async (product) => {
-          await generateUniqueSlug(product);
-        },
-        beforeUpdate: async (product) => {
-          if (product.changed('name')) {
-            await generateUniqueSlug(product);
-          }
-        },
-      },
     }
   );
-
-  
-  const generateUniqueSlug = async (product) => {
-    // Generate slug from product name (not existing slug)
-    let baseSlug = slugify(product.name, { lower: true, strict: true });
-    let slug = baseSlug;
-    let counter = 1;
-
-    // Fetch all similar slugs in one query (performance improvement)
-    const existingSlugs = await Product.findAll({
-      where: {
-        slug: {
-          [sequelize.Op.like]: `${baseSlug}%`, // Find slugs starting with baseSlug
-        },
-      },
-      attributes: ['slug'],
-    });
-
-    const existingSlugSet = new Set(existingSlugs.map((p) => p.slug));
-
-    // Ensure unique slug
-    while (existingSlugSet.has(slug)) {
-      slug = `${baseSlug}-${counter++}`;
-    }
-
-    product.slug = slug;
-  };
 
   return Product;
 };

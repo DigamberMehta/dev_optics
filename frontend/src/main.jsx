@@ -24,6 +24,10 @@ import UserOrdersPage from "./pages/UserOrdersPage";
 import OrderStatusPage from "./pages/OrderStatusPage"; // Import OrderStatusPage
 import SearchResults from "./components/result/SearchResults";
 import WishlistPage from "./pages/WishlistPage";
+import AdminOrders from "./components/admin/AdminOrders"; // Import AdminOrders
+import AdminAddProduct from "./components/admin/AdminAddProduct";
+import AdminProductList from "./components/admin/AdminProductList"; // Import AdminProductList
+import AdminPanel from "./components/admin/AdminPanel";
 
 const router = createBrowserRouter([
   {
@@ -98,6 +102,23 @@ const router = createBrowserRouter([
         path: "/wishlist",
         element: <WishlistPage />
       },
+      {
+        path: "/admin/orders",
+        element: <AdminOrders/>
+      },
+      {
+        path: "/admin/add/product",
+        element: <AdminAddProduct/>
+      },
+      {
+        path: "/admin/products",
+        element: <AdminProductList/>
+      },
+      {
+        path: "/admin-panel",
+        element: <AdminPanel/>
+      },
+
     ],
   },
 ]);

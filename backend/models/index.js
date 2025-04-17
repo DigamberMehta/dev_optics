@@ -16,13 +16,12 @@ import CustomizationPriceModel from './customizationPrice.js';
 
  
 
-const sequelize = new Sequelize('dev_optics', 'root', '', {
-  host: 'localhost',
+const sequelize = new Sequelize('mysql://root:iJZomFXAUpHEsiTezsiDqfjiAXVdUeqs@gondola.proxy.rlwy.net:39615/railway', {
   dialect: 'mysql',
   logging: false,
 });
 
-// Test Connection
+// Test connection
 (async () => {
   try {
     await sequelize.authenticate();
