@@ -1,7 +1,7 @@
 // frontend/src/components/ImageContainer.js
 import React, { useState, useEffect, useContext } from "react";
 import { Heart, Share2 } from "lucide-react";
-import CustomizationSidebar from "../cart/CustomizationSidebar";
+import CustomizationSidebar from "../Cart/CustomizationSidebar";
 import AuthContext from "../../context/authContext";
 import { toast } from "sonner";
 import { useNavigate } from 'react-router-dom';
