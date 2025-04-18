@@ -16,7 +16,7 @@ import { load } from "@cashfreepayments/cashfree-js";
 import axios from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "@/context/AuthContext";
+import AuthContext from "@/context/authContext";
 
 const ShippingAndPayment = ({
   userAddress,
