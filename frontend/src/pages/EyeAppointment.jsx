@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,7 +7,6 @@ import { CalendarIcon, Clock, X } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import authContext from "../context/authContext";
 import { toast } from "sonner";
 
 export default function EyeAppointment({ closeModal }) {
@@ -16,7 +15,7 @@ export default function EyeAppointment({ closeModal }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [timeOpen, setTimeOpen] = useState(false);
-  const { user } = useContext(authContext);
+  const backendURL = import.meta.env.VITE_BACKEND_URL + '/api';
 
   const generateTimeSlots = () => {
     const slots = [];
@@ -54,13 +53,14 @@ export default function EyeAppointment({ closeModal }) {
     const appointmentData = {
       date: format(date, "yyyy-MM-dd"),
       time: time,
+      name: name,
+      email: email,
     };
 
     const token = localStorage.getItem('token');
-    // console.log(token);
 
     try {
-      const response = await fetch('http://localhost:3000/api/appointments', {
+      const response = await fetch(`${backendURL}/api/appointments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -120,9 +120,9 @@ export default function EyeAppointment({ closeModal }) {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-2">
-                    <Calendar 
+                    <Calendar
                       mode="single"
-                      selected={date} 
+                      selected={date}
                       onSelect={setDate}
                     />
                   </PopoverContent>
