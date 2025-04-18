@@ -15,7 +15,7 @@ import FrameResult from "./components/result/FrameResult"; // Import FrameResult
 import EyewearforEveryoneResult from "./components/result/EyewearforEveryoneResult";
 import HomePreview from "./components/preview/HomePreview";
  
-import Cart from "./components/cart/Cart.jsx";
+import Cart from "./components/cart/Cart";
 import UserProfile from "./pages/UserProfile";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderConfirmationPage from "./pages/OrderConfirmationPage";
