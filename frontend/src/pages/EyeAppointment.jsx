@@ -60,7 +60,7 @@ export default function EyeAppointment({ closeModal }) {
     const token = localStorage.getItem('token');
 
     try {
-      const response = await fetch(`${backendURL}/api/appointments`, {
+      const response = await fetch(`${backendURL}/appointments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
