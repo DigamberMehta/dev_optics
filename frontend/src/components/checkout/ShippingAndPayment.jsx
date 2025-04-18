@@ -16,7 +16,7 @@ import { load } from "@cashfreepayments/cashfree-js";
 import axios from "axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import AuthContext from "@/context/AuthContext"; // Adjust the path if needed
+import AuthContext from "@/context/AuthContext";
 
 const ShippingAndPayment = ({
   userAddress,
@@ -25,22 +25,20 @@ const ShippingAndPayment = ({
   setIsPaymentModalOpen,
   handleCashOnDelivery,
   totalAmount,
-  buyNowProduct, // Receive buyNowProduct prop
+  buyNowProduct,
 }) => {
   const navigate = useNavigate();
   const [cashfreeInstance, setCashfreeInstance] = useState(null);
   const { user } = useContext(AuthContext);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
-    console.log("useEffect for initializing Cashfree SDK called");
     const initializeCashfree = async () => {
       try {
-        console.log("Attempting to load Cashfree SDK");
         const cf = await load({
           mode: process.env.NODE_ENV === 'production' ? "production" : "sandbox",
         });
         setCashfreeInstance(cf);
-        console.log("Cashfree SDK loaded successfully:", cf);
       } catch (error) {
         console.error("Error loading Cashfree SDK:", error);
         toast.error("Failed to load payment gateway.");
@@ -48,22 +46,22 @@ const ShippingAndPayment = ({
     };
 
     initializeCashfree();
-  },[]);
+  }, []);
 
   const handlePayWithCashfree = async () => {
-    console.log("handlePayWithCashfree function called");
     if (!cashfreeInstance) {
-      console.warn("Cashfree instance is not ready yet.");
       toast.error("Payment gateway not ready.");
       return;
     }
-    console.log("Total Amount being sent to backend:", totalAmount);
+
     try {
-      console.log("Attempting to create Cashfree order on backend...");
       let response;
+      const apiUrl = `${backendUrl}/api/orders`;
+      const buyNowApiUrl = `${backendUrl}/api/orders/create-cashfree-buy-now-order`;
+
       if (buyNowProduct && buyNowProduct.length > 0) {
         const product = buyNowProduct[0];
-        response = await axios.post("http://localhost:3000/api/orders/create-cashfree-buy-now-order", {
+        response = await axios.post(buyNowApiUrl, {
           totalAmount: totalAmount,
           userId: user?.user_id,
           shippingAddress: userAddress,
@@ -72,27 +70,21 @@ const ShippingAndPayment = ({
           customizations: product.customizations || {},
         });
       } else {
-        response = await axios.post("http://localhost:3000/api/orders/create-cashfree-order", {
+        response = await axios.post(apiUrl + "/create-cashfree-order", {
           totalAmount: totalAmount,
           userId: user?.user_id,
           shippingAddress: userAddress,
         });
       }
-      console.log("Backend Response Data:", response.data);
 
-      const sessionId = response.data?.payment_session_id; // Updated key name
-      console.log("Type of payment_session_id:", typeof sessionId);
-      console.log("Value of payment_session_id:", sessionId);
+      const sessionId = response.data?.payment_session_id;
 
       if (sessionId) {
         const checkoutOptions = {
-          paymentSessionId: sessionId, // Cashfree SDK expects this key
+          paymentSessionId: sessionId,
           redirectTarget: "_self",
         };
-        console.log("Payment Session ID received:", sessionId);
-        console.log("Calling cashfreeInstance.checkout with options:", checkoutOptions);
         cashfreeInstance.checkout(checkoutOptions);
-        console.log("cashfreeInstance.checkout called");
       } else {
         toast.error("Failed to initiate payment.");
         console.error("Cashfree order creation failed:", response.data);

@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [isError, setIsError] = useState(null);
 
  
-const backendURL = 'http://localhost:3000/api';
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
   // Add useEffect hook to check auth status on mount
   useEffect(() => {
@@ -28,7 +28,7 @@ const backendURL = 'http://localhost:3000/api';
     }
 
     try {
-      const response = await axios.get(`${backendURL}/profile`, {
+      const response = await axios.get(`${backendURL}/api/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser(response.data.user);
@@ -46,7 +46,7 @@ const backendURL = 'http://localhost:3000/api';
     setIsLoading(true);
     setIsError(null);
     try {
-      const response = await axios.post(`${backendURL}/register`, userData);
+      const response = await axios.post(`${backendURL}/api/register`, userData);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       await fetchUser();
@@ -64,7 +64,7 @@ const backendURL = 'http://localhost:3000/api';
     setIsLoading(true);
     setIsError(null);
     try {
-      const response = await axios.post(`${backendURL}/login`, credentials);
+      const response = await axios.post(`${backendURL}/api/login`, credentials);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
       await fetchUser();

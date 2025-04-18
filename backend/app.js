@@ -9,6 +9,7 @@ import userProfiles from "./routes/userProfile.js";
 import orderRoutes from "./routes/order.js";
 import UserRoute from "./routes/user.route.js";
 import adminRoutes from "./routes/admin.route.js";
+import AppointmentRoutes from "./routes/appointments.js";
 // import WishlistsModel from "./models/wishlists.js";
 dotenv.config({});
 
@@ -35,6 +36,7 @@ app.use("/api/user/profile", userProfiles);
 app.use("/api/orders", orderRoutes);
 app.use("/api", UserRoute);
 app.use("/api/admin", adminRoutes);
+app.use("/api/appointments", AppointmentRoutes);
 
 
 // app.use("/api/wishlist" , WishlistsModel);

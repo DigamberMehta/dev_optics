@@ -13,6 +13,7 @@ const SearchResults = () => {
   const [filteredResults, setFilteredResults] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -26,11 +27,11 @@ const SearchResults = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get(`http://localhost:3000/api/products/search?q=${searchQuery}`);
+        const response = await axios.get(`${backendUrl}/api/products/search?q=${searchQuery}`);
         console.log("Search Results API Response:", response.data);
         if (Array.isArray(response.data)) {
           setSearchResults(response.data);
-          setFilteredResults(response.data); // Initialize filtered results
+          setFilteredResults(response.data);
         } else {
           console.error("Search API response is not an array:", response.data);
           setSearchResults();
@@ -47,7 +48,7 @@ const SearchResults = () => {
     };
 
     fetchSearchResults();
-  }, [searchQuery]);
+  }, [searchQuery, backendUrl]);
 
   const handleFilterChange = (newFilteredProducts) => {
     setFilteredResults(newFilteredProducts);
@@ -67,7 +68,7 @@ const SearchResults = () => {
         <FilterSidebar products={searchResults} onFilterChange={handleFilterChange} />
       </div>
       <div className="w-full md:w-3/4 border-2 border-gray-200 p-2">
-        {filteredResults.length > 0 ? (
+        {filteredResults?.length > 0 ? (
           <OpticsCards products={filteredResults} />
         ) : (
           <p>No products found matching your search query.</p>

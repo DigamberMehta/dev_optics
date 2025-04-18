@@ -13,6 +13,7 @@ export default function Cart() {
   const [error, setError] = useState(null);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -25,7 +26,7 @@ export default function Cart() {
           return;
         }
         const response = await axios.get(
-          `http://localhost:3000/api/cart/get-cart-items?userId=${user.user_id}`
+          `${backendUrl}/api/cart/get-cart-items?userId=${user.user_id}`
         );
         setCartItems(response.data.items);
         setTotalItems(response.data.totalItems);
@@ -37,7 +38,7 @@ export default function Cart() {
       }
     };
     fetchCartItems();
-  }, [user]);
+  }, [user, backendUrl]);
 
   const calculateTotalPrice = () => {
     if (!cartItems) return 0;
@@ -135,7 +136,7 @@ export default function Cart() {
                   className="w-full h-full object-contain"
                 />
               </div>
-            
+
               {/* Content Container */}
               <div className="flex flex-col justify-between w-full">
                 <div className="space-y-2">

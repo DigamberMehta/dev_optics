@@ -11,6 +11,7 @@ const OrderConfirmationPage = () => {
   const [orderData, setOrderData] = useState(null);
   const [error, setError] = useState(null);
   const { user } = useContext(AuthContext);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchOrderDetails = async () => {
@@ -18,7 +19,7 @@ const OrderConfirmationPage = () => {
       setError(null);
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/orders/get-order-details/${orderId}?userId=${user?.user_id}`
+          `${backendUrl}/api/orders/get-order-details/${orderId}?userId=${user?.user_id}`
         );
         setOrderData(response.data);
         setLoading(false);
@@ -38,7 +39,7 @@ const OrderConfirmationPage = () => {
       setError("Order ID not found.");
       setLoading(false);
     }
-  }, [orderId, user?.user_id]);
+  }, [orderId, user?.user_id, backendUrl]);
 
   if (loading) {
     return <div className="text-center py-10">Loading order details...</div>;
@@ -115,10 +116,6 @@ const OrderConfirmationPage = () => {
             <Link to="/">
               <Button variant="outline">Continue Shopping</Button>
             </Link>
-            {/* Optionally, add an order history page link */}
-            {/* <Link to="/order-history">
-              <Button>View Order History</Button>
-            </Link> */}
           </div>
         </CardContent>
       </Card>

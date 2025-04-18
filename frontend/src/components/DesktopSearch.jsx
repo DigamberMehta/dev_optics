@@ -1,19 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const DesktopSearch = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState(); // Initialize as empty array
+  const [searchResults, setSearchResults] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const searchContainerRef = useRef(null);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchSearchResults = async () => {
       if (!searchQuery.trim()) {
-        setSearchResults();
+        setSearchResults([]);
         setIsOpen(false);
         setLoading(false);
         return;
@@ -21,21 +22,21 @@ const DesktopSearch = () => {
 
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:3000/api/products/search?q=${searchQuery}`);
-        console.log("API Response:", response.data); // Log the response for debugging
+        const response = await axios.get(`${backendUrl}/api/products/search?q=${searchQuery}`);
+        console.log("API Response:", response.data);
 
         if (Array.isArray(response.data)) {
           setSearchResults(response.data);
           setIsOpen(true);
         } else {
           console.error("API response is not an array:", response.data);
-          setSearchResults(); // Set to empty array to avoid .map error
+          setSearchResults([]);
           setIsOpen(false);
         }
         setLoading(false);
       } catch (error) {
         console.error('Error fetching search results:', error);
-        setSearchResults();
+        setSearchResults([]);
         setIsOpen(false);
         setLoading(false);
       }
@@ -43,10 +44,10 @@ const DesktopSearch = () => {
 
     const debounceTimer = setTimeout(() => {
       fetchSearchResults();
-    }, 300); // Debounce the search by 300ms
+    }, 300);
 
-    return () => clearTimeout(debounceTimer); // Cleanup the timer
-  }, [searchQuery]);
+    return () => clearTimeout(debounceTimer);
+  }, [searchQuery, backendUrl]);
 
   const handleInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -54,14 +55,14 @@ const DesktopSearch = () => {
 
   const handleResultClick = () => {
     setIsOpen(false);
-    setSearchQuery(''); // Clear the search query after selecting a result
+    setSearchQuery('');
   };
 
   const handleSearchSubmit = () => {
     if (searchQuery.trim()) {
-      navigate(`/search?q=${searchQuery}`); // Navigate to SearchResults page with the query
-      setIsOpen(false); // Close the dropdown
-      setSearchQuery(''); // Clear the input
+      navigate(`/search?q=${searchQuery}`);
+      setIsOpen(false);
+      setSearchQuery('');
     }
   };
 
@@ -71,7 +72,6 @@ const DesktopSearch = () => {
     }
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
@@ -95,15 +95,15 @@ const DesktopSearch = () => {
           value={searchQuery}
           onChange={handleInputChange}
           onFocus={() => searchQuery.trim() && setIsOpen(true)}
-          onKeyDown={handleKeyDown} // Add onKeyDown handler
+          onKeyDown={handleKeyDown}
         />
-        <i className="fa fa-search absolute left-3 top-3 text-gray-500 cursor-pointer" onClick={handleSearchSubmit}></i> {/* Make the search icon clickable */}
+        <i className="fa fa-search absolute left-3 top-3 text-gray-500 cursor-pointer" onClick={handleSearchSubmit}></i>
 
         {isOpen && (
           <div className="absolute top-full left-0 right-0 bg-white shadow-md rounded-md z-50 overflow-hidden">
             {loading ? (
               <div className="px-4 py-2 text-gray-500">Searching...</div>
-            ) : searchResults.length > 0 ? (
+            ) : searchResults?.length > 0 ? (
               <ul className="max-h-[300px] overflow-y-auto search-bar">
                 {searchResults.map((product) => (
                   <li
@@ -112,7 +112,7 @@ const DesktopSearch = () => {
                     onClick={handleResultClick}
                   >
                     <Link
-                      to={`/product/${product.product_id}/${product.slug}`} // Updated Link
+                      to={`/product/${product.product_id}/${product.slug}`}
                       className="block px-4 py-2"
                     >
                       <div className="flex items-center space-x-2">

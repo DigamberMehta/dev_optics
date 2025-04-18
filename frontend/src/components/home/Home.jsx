@@ -17,12 +17,13 @@ import Banner from '../banners/Banner';
 
 const Home = () => {
   const [products, setProducts] = useState();
-  const { modelViewerWidths, modelViewerRefs } = useModelViewerScale(2); // Now supports 2 ModelViewers
+  const { modelViewerWidths, modelViewerRefs } = useModelViewerScale(2);
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/products');
+        const response = await fetch(`${backendURL}/api/products`);
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
@@ -35,7 +36,7 @@ const Home = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [backendURL]);
 
   return (
     <>
@@ -45,7 +46,6 @@ const Home = () => {
         <ShopByCategory products={products} />
         <PromotionCarousel />
 
-        {/* First Model Viewer */}
         <div ref={modelViewerRefs.current[0]}>
           <ModelViewer
             modelFile="/models/sku_231942.glb"
@@ -59,7 +59,7 @@ const Home = () => {
         <Banner img={'https://static5.lenskart.com/media/uploads/hustlr-desktop-30-colors-gif.gif'}/>
         <NewArrivals products={products} />
         <ShopByPrice products={products} />
-        {/* Second Model Viewer */}
+
         <div ref={modelViewerRefs.current[1]}>
           <ModelViewer
             modelFile="/models/sku_207481.glb"
@@ -67,16 +67,16 @@ const Home = () => {
             width={modelViewerWidths[1]}
           />
         </div>
-       
+
         <Banner img={' https://static1.lenskart.com/media/desktop/img/Dec22/desk-hust.gif'}/>
         <BannerCards />
         <FrameShapeShop products={products} />
-      
+
 
         <EyewearForEveryone products={products} />
         <Test />
       </div>
-      
+
     </>
   );
 };

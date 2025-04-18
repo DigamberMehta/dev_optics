@@ -18,6 +18,7 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchCheckoutData = async () => {
@@ -34,20 +35,20 @@ const CheckoutPage = () => {
 
         if (productId) {
           const productResponse = await axios.get(
-            `http://localhost:3000/api/products/get-single-product/${productId}`
+            `${backendUrl}/api/products/get-single-product/${productId}`
           );
           setBuyNowProduct([productResponse.data]);
           setCartItems();
         } else {
           const cartResponse = await axios.get(
-            `http://localhost:3000/api/cart/get-checkout-items?userId=${user.user_id}`
+            `${backendUrl}/api/cart/get-checkout-items?userId=${user.user_id}`
           );
           setCartItems(cartResponse.data.items);
           setBuyNowProduct(null);
         }
 
         const addressResponse = await axios.get(
-          `http://localhost:3000/api/user/profile/${user.user_id}`
+          `${backendUrl}/api/user/profile/${user.user_id}`
         );
         setUserAddress(addressResponse.data.address);
         setLoading(false);
@@ -59,7 +60,7 @@ const CheckoutPage = () => {
     };
 
     fetchCheckoutData();
-  }, [user, searchParams]);
+  }, [user, searchParams, backendUrl]);
 
   const calculateTotalPrice = () => {
     if (buyNowProduct && buyNowProduct.length > 0) {
@@ -91,7 +92,7 @@ const CheckoutPage = () => {
           customizations: product.customizations || {},
           shippingAddress: shippingAddress,
         };
-        response = await axios.post("http://localhost:3000/api/orders/create-buy-now", orderData);
+        response = await axios.post(`${backendUrl}/api/orders/create-buy-now`, orderData);
       } else if (cartItems && cartItems.length > 0) {
         const orderItems = cartItems.map((item) => ({
           product_id: item.product.product_id,
@@ -106,8 +107,7 @@ const CheckoutPage = () => {
           totalAmount: calculateTotalPrice(),
           shippingAddress: shippingAddress,
         };
-        response = await axios.post("http://localhost:3000/api/orders/create", orderData);
-        // Removed the cart clearing logic here
+        response = await axios.post(`${backendUrl}/api/orders/create`, orderData);
       } else {
         setError("No items to checkout.");
         setLoading(false);
@@ -115,7 +115,7 @@ const CheckoutPage = () => {
       }
 
       if (response && response.status === 201) {
-        navigate(`/order-confirmation/${response.data.orderId}`); // Changed navigate here
+        navigate(`/order-confirmation/${response.data.orderId}`);
       } else {
         setError("Failed to place order.");
       }
@@ -158,12 +158,10 @@ const CheckoutPage = () => {
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
-        {/* Left Section - Checkout Items */}
         <div className="lg:col-span-2 space-y-6">
           <CheckoutItems buyNowProduct={buyNowProduct} cartItems={cartItems} />
         </div>
 
-        {/* Right Section - Order Summary and Payment */}
         <div className="lg:col-span-1 space-y-6">
           <OrderSummary calculateTotalPrice={calculateTotalPrice} />
 

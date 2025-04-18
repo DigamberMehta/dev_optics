@@ -11,7 +11,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = import.meta.env.VITE_BACKEND_URL + '/api';
 
 const ENUMS = {
   PRODUCT_TYPES: ['', 'frame', 'prescription_glasses', 'sunglasses', 'blue_light_glasses', 'computer_glasses', 'prescription_sunglasses', 'Eyeglasses', 'Reading_Glasses', 'Contact_Lenses', 'Accessories'],

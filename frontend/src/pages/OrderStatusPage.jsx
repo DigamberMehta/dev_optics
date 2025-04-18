@@ -9,6 +9,7 @@ const OrderStatusPage = () => {
   const [paymentStatus, setPaymentStatus] = useState("Verifying payment...");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const cfOrderId = searchParams.get("cf_order_id");
@@ -17,12 +18,11 @@ const OrderStatusPage = () => {
     const verifyPayment = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:3000/api/orders/verify-cashfree-payment",
+          `${backendUrl}/api/orders/verify-cashfree-payment`,
           { orderId: orderId, cfOrderId: cfOrderId, token: token }
         );
         if (response.data.paymentStatus === "SUCCESS") {
           setPaymentStatus("Payment Successful!");
-          // Optionally, redirect the user to an order confirmation page
           navigate(`/order-confirmation/${orderId}`);
         } else {
           setPaymentStatus("Payment Failed.");
@@ -41,7 +41,7 @@ const OrderStatusPage = () => {
       setPaymentStatus("Invalid Order Information.");
       setError("Missing order ID or Cashfree order ID.");
     }
-  }, [orderId, searchParams, navigate]);
+  }, [orderId, searchParams, navigate, backendUrl]);
 
   return (
     <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
@@ -55,7 +55,6 @@ const OrderStatusPage = () => {
             {paymentStatus === "Payment Successful!" && (
               <p className="mt-4">Your order ID is: {orderId}</p>
             )}
-            {/* Add a link to the order details page if needed */}
           </div>
         </div>
       </div>

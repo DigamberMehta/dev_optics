@@ -9,7 +9,7 @@ import AuthContext from "../../context/authContext";
 export default function OpticsCards({ products }) {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-  const backendURL = 'http://localhost:3000';
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
 
   const handleProductClick = (product) => {
     navigate(`/product/${product.product_id}/${product.slug}`);
@@ -19,7 +19,6 @@ export default function OpticsCards({ products }) {
     event.stopPropagation();
 
     if (!user?.user_id) {
-      console.log("User not logged in.");
       navigate('/login');
       return;
     }
@@ -109,7 +108,7 @@ export default function OpticsCards({ products }) {
             </div>
           </CardContent>
 
-          
+
         </Card>
       ))}
       {!products || products.length === 0 ? (

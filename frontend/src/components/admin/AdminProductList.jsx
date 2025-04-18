@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2, LayoutGrid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = import.meta.env.VITE_BACKEND_URL + '/api';
 
 function AdminProductList() {
   const [products, setProducts] = useState([]);

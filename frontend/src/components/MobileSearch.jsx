@@ -8,6 +8,7 @@ const MobileSearch = ({ isSearchOpen, setIsSearchOpen }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const searchContainerRef = useRef(null);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -21,7 +22,7 @@ const MobileSearch = ({ isSearchOpen, setIsSearchOpen }) => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/products/search?q=${searchQuery}`
+          `${backendUrl}/api/products/search?q=${searchQuery}`
         );
         console.log("Mobile Search API Response:", response.data);
 
@@ -50,7 +51,7 @@ const MobileSearch = ({ isSearchOpen, setIsSearchOpen }) => {
     }, 300);
 
     return () => clearTimeout(debounceTimer);
-  }, [searchQuery]);
+  }, [searchQuery, backendUrl]);
 
   const handleInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -59,7 +60,7 @@ const MobileSearch = ({ isSearchOpen, setIsSearchOpen }) => {
   const handleResultClick = () => {
     setIsOpen(false);
     setSearchQuery("");
-    setIsSearchOpen(false); // Close the mobile search bar after selecting
+    setIsSearchOpen(false);
   };
 
   const handleCloseSearch = () => {
@@ -112,7 +113,7 @@ const MobileSearch = ({ isSearchOpen, setIsSearchOpen }) => {
             <div className="bg-white shadow-md rounded-md overflow-hidden">
               {loading ? (
                 <div className="px-4 py-2 text-gray-500">Searching...</div>
-              ) : searchResults.length > 0 ? (
+              ) : searchResults?.length > 0 ? (
                 <ul className="max-h-[300px] overflow-y-auto search-bar">
                   {searchResults.map((product) => (
                     <li

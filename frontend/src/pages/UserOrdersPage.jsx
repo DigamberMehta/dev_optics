@@ -12,6 +12,7 @@ const UserOrdersPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useContext(AuthContext);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchUserOrders = async () => {
@@ -24,7 +25,7 @@ const UserOrdersPage = () => {
           return;
         }
 
-        const response = await axios.get(`http://localhost:3000/api/orders/user-orders?userId=${user.user_id}`);
+        const response = await axios.get(`${backendUrl}/api/orders/user-orders?userId=${user.user_id}`);
         setOrders(response.data);
       } catch (err) {
         setError("Failed to fetch orders.");
@@ -34,7 +35,7 @@ const UserOrdersPage = () => {
     };
 
     fetchUserOrders();
-  }, [user]);
+  }, [user, backendUrl]);
 
   if (loading) {
     return (
@@ -93,7 +94,7 @@ const UserOrdersPage = () => {
                                 {item.customizations && Object.keys(item.customizations).length > 0 && (
                                   <p className="text-xs text-gray-600">
                                     Customizations: {Object.entries(item.customizations)
-                                      .filter(([_, value]) => value !== null && value !== false) // Filter out null/false values
+                                      .filter(([_, value]) => value !== null && value !== false)
                                       .map(([key, value]) => {
                                         const aliasMap = {
                                           power: "Power",
