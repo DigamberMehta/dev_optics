@@ -16,7 +16,7 @@ import EyewearforEveryoneResult from "./components/result/EyewearforEveryoneResu
 import HomePreview from "./components/preview/HomePreview";
 
 import ModelViewer from "./pages/ModelViewer.jsx";
-import Cart from "./components/Cart/Cart";
+import Cart from "./components/cart/Cart";
 import UserProfile from "./pages/UserProfile";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderConfirmationPage from "./pages/OrderConfirmationPage";
@@ -76,49 +76,48 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <UserProfile />
+        element: <UserProfile />,
       },
       {
         path: "/checkout",
-        element: <CheckoutPage />
+        element: <CheckoutPage />,
       },
       {
         path: "/order-status/:orderId",
-        element: <OrderStatusPage /> // Changed to OrderStatusPage
+        element: <OrderStatusPage />, // Changed to OrderStatusPage
       },
       {
         path: "/order-confirmation/:orderId", // Keep this route for the final confirmation
-        element: <OrderConfirmationPage />
+        element: <OrderConfirmationPage />,
       },
       {
         path: "/orders",
-        element: <UserOrdersPage />
+        element: <UserOrdersPage />,
       },
       {
         path: "/search",
-        element: <SearchResults />
+        element: <SearchResults />,
       },
       {
         path: "/wishlist",
-        element: <WishlistPage />
+        element: <WishlistPage />,
       },
       {
         path: "/admin/orders",
-        element: <AdminOrders/>
+        element: <AdminOrders />,
       },
       {
         path: "/admin/add/product",
-        element: <AdminAddProduct/>
+        element: <AdminAddProduct />,
       },
       {
         path: "/admin/products",
-        element: <AdminProductList/>
+        element: <AdminProductList />,
       },
       {
         path: "/admin-panel",
-        element: <AdminPanel/>
+        element: <AdminPanel />,
       },
-
     ],
   },
 ]);
@@ -128,5 +127,5 @@ createRoot(document.getElementById("root")).render(
     <RouterProvider router={router} />
     <Toaster />
     <Footer />
-    </>
+  </>
 );
