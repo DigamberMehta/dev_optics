@@ -18,9 +18,20 @@ const app = express();
 // Default middlewares
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "https://dev-optics-bbiq.vercel.app"
+      ];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true
-}));
+  }));
+  
 app.use(cookieParser());
 
 const PORT = 3000;
