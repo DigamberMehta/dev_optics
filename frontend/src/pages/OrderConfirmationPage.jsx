@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
-import AuthContext from "@/context/AuthContext";
+import AuthContext from "@/context/authContext";
 
 const OrderConfirmationPage = () => {
   const { orderId } = useParams();
